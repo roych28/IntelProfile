@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { CalendarDateRangePicker } from '@/components/date-range-picker';
 import { Overview } from '@/components/overview';
 import { RecentSales } from '@/components/recent-sales';
@@ -18,14 +19,14 @@ export default function page() {
       <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">
-            Hi, Welcome back 👋
+            Home 👋
           </h2>
-          <div className="hidden items-center space-x-2 md:flex">
+          {/*<div className="hidden items-center space-x-2 md:flex">
             <CalendarDateRangePicker />
             <Button>Download</Button>
-          </div>
+          </div>*/}
         </div>
-        <Tabs defaultValue="overview" className="space-y-4">
+        {/*<Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="analytics" disabled>
@@ -158,7 +159,7 @@ export default function page() {
               </Card>
             </div>
           </TabsContent>
-        </Tabs>
+        </Tabs>*/}
       </div>
     </ScrollArea>
   );
