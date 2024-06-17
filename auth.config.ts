@@ -36,8 +36,10 @@ const authConfig = {
     })
   ],
   pages: {
-    signIn: '/' //sigin page
-  }
+    signIn: '/' // Sign-in page
+  },
+  debug: true,
+  trustHost: true
 } satisfies NextAuthConfig;
 
 export default authConfig;
