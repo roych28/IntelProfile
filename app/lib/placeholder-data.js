@@ -27,14 +27,14 @@ const identifiers = [
     {
       id: '6a44a75d-9cb4-4c25-8b7e-fbc6e70c3c65',
       case_id: '5b8f33c2-d4c8-4df5-9b72-c73c0e2cddf5',
-      type: 'Type 1',
-      query: 'Query 1',
+      type: 'email',
+      query: 'bob@gmail.com',
     },
     {
       id: '6a44a75d-9cb4-4c25-8b7e-fbc6e70c3c66',
       case_id: '5b8f33c2-d4c8-4df5-9b72-c73c0e2cddf5',
-      type: 'Type 2',
-      query: 'Query 2',
+      type: 'phone',
+      query: 'stan@gmail.com',
     },
 ];
 

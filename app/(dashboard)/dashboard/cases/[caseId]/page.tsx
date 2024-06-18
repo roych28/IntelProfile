@@ -6,8 +6,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Trash } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 import {
   Form,
   FormField,
@@ -23,12 +25,14 @@ import { useCases } from '@/app/lib/data-provider';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
-  id: z.string().optional(), // Add id to the schema
+  id: z.string().optional(),
   identifiers: z.array(z.object({
     id: z.string(),
     case_id: z.string(),
-    identifier: z.string(),
-  })).optional(), // Add identifiers to the schema
+    type: z.string(),
+    query: z.string(),
+    image_url: z.string().optional(),
+  })).optional(),
 });
 
 type CaseFormValues = z.infer<typeof formSchema>;
@@ -36,6 +40,17 @@ type CaseFormValues = z.infer<typeof formSchema>;
 interface CaseFormProps {
   initialData?: CaseFormValues | null;
 }
+
+const identifierImages = {
+  'email': '/email.jpg',
+  'phonenumber': '/phone.png',
+  'username': 'username.png',
+  'fullname': '/fullname.png',
+  'socialurl': '/social-url.png',
+  'telegramid': '/telegram.png',
+  'reverseimage': '/reverse-image.png',
+  'facename': '/face-and-name.png',
+};
 
 const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   const router = useRouter();
@@ -155,6 +170,22 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
               )}
             />
           </div>
+          {initialData && initialData.identifiers && (
+            <div>
+              <h2 className="text-lg font-semibold">Identifiers</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {initialData.identifiers.map((identifier) => (
+                  <Link key={identifier.id} href={`/cases/${identifier.case_id}/identifiers/${identifier.id}`}>
+                    <div className="p-4 border border-gray-700 bg-gray-800 rounded-lg cursor-pointer">
+                      <Image src={'/' + identifierImages[identifier.type]} alt={identifier.type} className="w-full h-32 object-cover rounded-lg mb-2" />
+                      <p><strong>Type:</strong> {identifier.type}</p>
+                      <p><strong>Query:</strong> {identifier.query}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
           <Button disabled={loading} className="ml-auto bg-blue-500 hover:bg-blue-600" type="submit">
             {action}
           </Button>
@@ -168,7 +199,6 @@ const CasePage = () => {
   const { caseId } = useParams();
   const { getCaseById } = useCases();
   
-  // Ensure caseId is treated as a string
   const caseIdString = Array.isArray(caseId) ? caseId[0] : caseId;
 
   const caseDetails = getCaseById(caseIdString);
