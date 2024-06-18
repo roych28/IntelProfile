@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-type Case = {
+export type Case = {
   id: string;
   title: string;
   description: string;
