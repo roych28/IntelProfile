@@ -1,5 +1,21 @@
 import { Icons } from '@/components/icons';
 
+export interface Identifier {
+  id: string;
+  case_id: string;
+  type: string;
+  query: string;
+}
+
+// 'Email'
+// 'Phone Number'
+// 'Username'
+// 'Fullname'
+// 'Social URL'
+// 'Telegram ID'
+// 'Reverse Image'
+// 'Face and Name'
+
 export type Case = {
   id: string;
   name: string;

@@ -6,7 +6,7 @@ import { MobileSidebar } from './mobile-sidebar';
 import { UserNav } from './user-nav';
 import Link from 'next/link';
 
-const authUrl = process.env.NEXTAUTH_URL || 'localhost:3000';
+const authUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
 
 export default function Header() {
   return (

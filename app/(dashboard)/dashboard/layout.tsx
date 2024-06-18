@@ -4,8 +4,8 @@ import type { Metadata } from 'next';
 import { DataProvider } from '@/app/lib/data-provider'; // Adjust the import path
 
 export const metadata: Metadata = {
-  title: 'Next Shadcn Dashboard Starter',
-  description: 'Basic dashboard with Next.js and Shadcn'
+  title: 'Profile inteligence',
+  description: ''
 };
 
 export default function DashboardLayout({

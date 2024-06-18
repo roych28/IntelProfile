@@ -23,6 +23,12 @@ import { useCases } from '@/app/lib/data-provider';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
+  id: z.string().optional(), // Add id to the schema
+  identifiers: z.array(z.object({
+    id: z.string(),
+    case_id: z.string(),
+    identifier: z.string(),
+  })).optional(), // Add identifiers to the schema
 });
 
 type CaseFormValues = z.infer<typeof formSchema>;
@@ -35,8 +41,9 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const { caseId } = useParams();
+
   const title = initialData ? 'Edit Case' : 'Create Case';
-  //const description = initialData ? 'Edit the case details.' : 'Add a new case';
   const toastMessage = initialData ? 'Case updated.' : 'Case created.';
   const action = initialData ? 'Save changes' : 'Create';
 
@@ -44,6 +51,7 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
     ? initialData
     : {
         name: '',
+        identifiers: [],
       };
 
   const form = useForm<CaseFormValues>({
@@ -54,11 +62,16 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   const onSubmit = async (data: CaseFormValues) => {
     try {
       setLoading(true);
-      if (initialData) {
-        // await axios.post(`/api/cases/edit-case/${initialData.id}`, data);
-      } else {
-        // await axios.post(`/api/cases/create-case`, data);
+      const response = await fetch(`/api/cases`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
+
       router.refresh();
       router.push(`/dashboard/cases`);
       toast({
@@ -80,11 +93,25 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      // await axios.delete(`/api/cases/${params.caseId}`);
+      const response = await fetch(`/api/cases/${caseId}`, { method: 'DELETE' });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
       router.refresh();
       router.push(`/cases`);
+      toast({
+        variant: 'default',
+        title: 'Case deleted.',
+        description: 'The case has been successfully deleted.'
+      });
     } catch (error: any) {
-      // Handle error
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: 'There was a problem with your request.'
+      });
     } finally {
       setLoading(false);
     }
@@ -93,7 +120,7 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   return (
     <>
       <div className="flex items-center justify-between">
-        <Heading title={title} description={""} />
+        <Heading title={title} description="" />
         {initialData && (
           <Button
             disabled={loading}
