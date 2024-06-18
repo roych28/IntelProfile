@@ -24,18 +24,54 @@ const cases = [
 ];
 
 const identifiers = [
-    {
-      id: '6a44a75d-9cb4-4c25-8b7e-fbc6e70c3c65',
-      case_id: '5b8f33c2-d4c8-4df5-9b72-c73c0e2cddf5',
-      type: 'email',
-      query: 'bob@gmail.com',
-    },
-    {
-      id: '6a44a75d-9cb4-4c25-8b7e-fbc6e70c3c66',
-      case_id: '5b8f33c2-d4c8-4df5-9b72-c73c0e2cddf5',
-      type: 'phone',
-      query: 'stan@gmail.com',
-    },
+  {
+    id: '6a44a75d-9cb4-4c25-8b7e-fbc6e70c3c65',
+    case_id: '5b8f33c2-d4c8-4df5-9b72-c73c0e2cddf5',
+    type: 'email',
+    query: 'bob@gmail.com',
+  },
+  {
+    id: '6a44a75d-9cb4-4c25-8b7e-fbc6e70c3c66',
+    case_id: '5b8f33c2-d4c8-4df5-9b72-c73c0e2cddf5',
+    type: 'phone',
+    query: 'stan@gmail.com',
+  },
+  {
+    id: '6a44a75d-9cb4-4c25-8b7e-fbc6e70c3c67',
+    case_id: '5b8f33c2-d4c8-4df5-9b72-c73c0e2cddf5',
+    type: 'username',
+    query: 'user123',
+  },
+  {
+    id: '6a44a75d-9cb4-4c25-8b7e-fbc6e70c3c68',
+    case_id: '5b8f33c2-d4c8-4df5-9b72-c73c0e2cddf5',
+    type: 'fullname',
+    query: 'Bob Stan',
+  },
+  {
+    id: '6a44a75d-9cb4-4c25-8b7e-fbc6e70c3c69',
+    case_id: '5b8f33c2-d4c8-4df5-9b72-c73c0e2cddf5',
+    type: 'socialurl',
+    query: 'https://twitter.com/bobstan',
+  },
+  {
+    id: '6a44a75d-9cb4-4c25-8b7e-fbc6e70c3c70',
+    case_id: '5b8f33c2-d4c8-4df5-9b72-c73c0e2cddf5',
+    type: 'telegramid',
+    query: '@bobstan',
+  },
+  {
+    id: '6a44a75d-9cb4-4c25-8b7e-fbc6e70c3c71',
+    case_id: '5b8f33c2-d4c8-4df5-9b72-c73c0e2cddf5',
+    type: 'reverseimage',
+    query: 'https://example.com/image.jpg',
+  },
+  {
+    id: '6a44a75d-9cb4-4c25-8b7e-fbc6e70c3c72',
+    case_id: '5b8f33c2-d4c8-4df5-9b72-c73c0e2cddf5',
+    type: 'facename',
+    query: 'Bob Stan',
+  },
 ];
 
 module.exports = {

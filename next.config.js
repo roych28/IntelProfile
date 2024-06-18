@@ -5,6 +5,11 @@ const nextConfig = {
   },
   productionBrowserSourceMaps: true,
   output: "standalone",
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
 };
 
 module.exports = nextConfig;

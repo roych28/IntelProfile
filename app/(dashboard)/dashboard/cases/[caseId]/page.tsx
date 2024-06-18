@@ -43,13 +43,13 @@ interface CaseFormProps {
 
 const identifierImages = {
   'email': '/email.jpg',
-  'phonenumber': '/phone.png',
-  'username': 'username.png',
-  'fullname': '/fullname.png',
-  'socialurl': '/social-url.png',
-  'telegramid': '/telegram.png',
-  'reverseimage': '/reverse-image.png',
-  'facename': '/face-and-name.png',
+  'phone': '/phone.jpg',
+  'username': '/username.jpg',
+  'fullname': '/fullname.jpg',
+  'socialurl': '/social-url.jpg',
+  'telegramid': '/telegram.jpg',
+  'reverseimage': '/reverse-image.jpg',
+  'facename': '/face-and-name.jpg',
 };
 
 const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
@@ -177,7 +177,13 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
                 {initialData.identifiers.map((identifier) => (
                   <Link key={identifier.id} href={`/cases/${identifier.case_id}/identifiers/${identifier.id}`}>
                     <div className="p-4 border border-gray-700 bg-gray-800 rounded-lg cursor-pointer">
-                      <Image src={'/' + identifierImages[identifier.type]} alt={identifier.type} className="w-full h-32 object-cover rounded-lg mb-2" />
+                      <Image
+                        src={identifierImages[identifier.type]}
+                        alt={identifier.type}
+                        width={100} // Specify width
+                        height={100} // Specify height
+                        className="object-cover rounded-lg mb-2"
+                      />
                       <p><strong>Type:</strong> {identifier.type}</p>
                       <p><strong>Query:</strong> {identifier.query}</p>
                     </div>
