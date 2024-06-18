@@ -1,19 +1,22 @@
+'use client';
+
+import React from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useCases } from '@/app/lib/data-provider'; // Adjust the import path
 
-const cases = [
-  { id: 1, title: 'Case 1', description: 'This is a brief description of Case 1.', thumbnail: '/placeholder.svg' },
-  { id: 2, title: 'Case 2', description: 'This is a brief description of Case 2.', thumbnail: '/placeholder.svg' },
-  { id: 3, title: 'Case 3', description: 'This is a brief description of Case 3.', thumbnail: '/placeholder.svg' },
-  { id: 4, title: 'Case 4', description: 'This is a brief description of Case 4.', thumbnail: '/placeholder.svg' },
-  { id: 5, title: 'Case 5', description: 'This is a brief description of Case 5.', thumbnail: '/placeholder.svg' },
-  { id: 6, title: 'Case 6', description: 'This is a brief description of Case 6.', thumbnail: '/placeholder.svg' },
-];
+const CasesPage: React.FC = () => {
+  const { cases } = useCases();
+  const router = useRouter();
 
-export default function Component() {
+  const handleNavigation = (id: string) => {
+    router.push(`/dashboard/cases/${id}`);
+  };
+
   return (
-    <div className="flex flex-col min-h-[100dvh]">
-      <header className="bg-gray-900 text-white py-4 px-6">
+    <div className="flex flex-col min-h-[100dvh] bg-gray-900 text-white">
+      <header className="bg-gray-800 text-white py-4 px-6">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold">Cases</h1>
           <Link
@@ -28,29 +31,30 @@ export default function Component() {
       <main className="container mx-auto py-8 px-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {cases.map((caseItem) => (
-            <Link
+            <div
               key={caseItem.id}
-              href="#"
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-              prefetch={false}
+              onClick={() => handleNavigation(caseItem.id)}
+              className="bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
             >
-              <div className="aspect-w-16 aspect-h-9">
+              <div className="relative w-full h-0 pb-[100%]"> {/* Square aspect ratio */}
                 <Image
-                  src={caseItem.thumbnail}
-                  alt={`Thumbnail for ${caseItem.title}`}
-                  width={400}
-                  height={225}
-                  className="w-full h-full object-cover"
+                  src={caseItem.thumbnail || '/case1.jpg'} // Assuming you have the thumbnail URL or fallback image
+                  alt="Case Image"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-t-lg"
                 />
               </div>
               <div className="p-4">
-                <h2 className="text-lg font-bold mb-2">{caseItem.title}</h2>
-                <p className="text-gray-500 mb-4">{caseItem.description}</p>
+                <h2 className="text-lg font-bold mb-2">{caseItem.name}</h2>
+                <p className="text-gray-400 mb-4">{caseItem.description}</p>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </main>
     </div>
   );
-}
+};
+
+export default CasesPage;

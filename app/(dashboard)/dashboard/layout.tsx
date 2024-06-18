@@ -1,6 +1,7 @@
 import Header from '@/components/layout/header';
 import Sidebar from '@/components/layout/sidebar';
 import type { Metadata } from 'next';
+import { DataProvider } from '@/app/lib/data-provider'; // Adjust the import path
 
 export const metadata: Metadata = {
   title: 'Next Shadcn Dashboard Starter',
@@ -17,7 +18,10 @@ export default function DashboardLayout({
       <Header />
       <div className="flex h-screen overflow-hidden">
         <Sidebar />
-        <main className="flex-1 overflow-hidden pt-16">{children}</main>
+        <DataProvider> 
+          <main className="flex-1 overflow-hidden pt-14">{children}</main>
+        </DataProvider>
+       
       </div>
     </>
   );
