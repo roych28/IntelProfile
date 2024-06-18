@@ -1,7 +1,7 @@
 'use client';
 
 import * as z from 'zod';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Trash } from 'lucide-react';
@@ -19,6 +19,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { Heading } from '@/components/ui/heading';
 import { useToast } from '@/components/ui/use-toast';
+import { useCases } from '@/app/lib/data-provider';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
@@ -31,12 +32,11 @@ interface CaseFormProps {
 }
 
 const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
-  const params = useParams();
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const title = initialData ? 'Edit Case' : 'Create Case';
-  const description = initialData ? 'Edit the case details.' : 'Add a new case';
+  //const description = initialData ? 'Edit the case details.' : 'Add a new case';
   const toastMessage = initialData ? 'Case updated.' : 'Case created.';
   const action = initialData ? 'Save changes' : 'Create';
 
@@ -60,17 +60,17 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
         // await axios.post(`/api/cases/create-case`, data);
       }
       router.refresh();
-      router.push(`/cases`);
+      router.push(`/dashboard/cases`);
       toast({
+        variant: 'default',
         title: toastMessage,
-        description: 'Case has been successfully saved.',
-        status: 'success',
+        description: 'Case has been successfully saved.'
       });
     } catch (error: any) {
       toast({
+        variant: 'destructive',
         title: 'Uh oh! Something went wrong.',
-        description: 'There was a problem with your request.',
-        status: 'error',
+        description: 'There was a problem with your request.'
       });
     } finally {
       setLoading(false);
@@ -93,7 +93,7 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   return (
     <>
       <div className="flex items-center justify-between">
-        <Heading title={title} description={description} />
+        <Heading title={title} description={""} />
         {initialData && (
           <Button
             disabled={loading}
@@ -119,6 +119,7 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
                     <Input
                       disabled={loading}
                       placeholder="Case name"
+                      className="bg-gray-800 text-white border-gray-700"
                       {...field}
                     />
                   </FormControl>
@@ -127,7 +128,7 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
               )}
             />
           </div>
-          <Button disabled={loading} className="ml-auto" type="submit">
+          <Button disabled={loading} className="ml-auto bg-blue-500 hover:bg-blue-600" type="submit">
             {action}
           </Button>
         </form>
@@ -139,10 +140,14 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
 const CasePage = () => {
   const { caseId } = useParams();
   const { getCaseById } = useCases();
-  const caseDetails = getCaseById(caseId);
+  
+  // Ensure caseId is treated as a string
+  const caseIdString = Array.isArray(caseId) ? caseId[0] : caseId;
+
+  const caseDetails = getCaseById(caseIdString);
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-900 text-white p-6">
       {caseId && caseDetails ? (
         <CaseForm initialData={caseDetails} />
       ) : (

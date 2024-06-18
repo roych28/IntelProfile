@@ -1,13 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-
-export type Case = {
-  id: string;
-  title: string;
-  description: string;
-  thumbnail: string;
-};
+import { Case } from '@/types';
 
 type CasesContextType = {
   cases: Case[];

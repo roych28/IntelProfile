@@ -1,5 +1,13 @@
 import { Icons } from '@/components/icons';
 
+export type Case = {
+  id: string;
+  name: string;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
 export interface NavItem {
   title: string;
   href?: string;

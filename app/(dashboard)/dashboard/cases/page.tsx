@@ -4,7 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useCases } from '@/app/lib/data-provider'; // Adjust the import path
+import { useCases } from '@/app/lib/data-provider';
 
 const CasesPage: React.FC = () => {
   const { cases } = useCases();
@@ -15,14 +15,13 @@ const CasesPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-gray-900 text-white">
-      <header className="bg-gray-800 text-white py-4 px-6">
+    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+      <header className="bg-gray-800 text-white py-4 px-6 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold">Cases</h1>
           <Link
-            href="#"
+            href="/dashboard/cases/new"
             className="inline-flex items-center justify-center px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            prefetch={false}
           >
             New Case
           </Link>
@@ -38,16 +37,15 @@ const CasesPage: React.FC = () => {
             >
               <div className="relative w-full h-0 pb-[100%]"> {/* Square aspect ratio */}
                 <Image
-                  src={caseItem.thumbnail || '/case1.jpg'} // Assuming you have the thumbnail URL or fallback image
+                  src={'/case1.jpg'} // Ensure the image path is correct
                   alt="Case Image"
                   layout="fill"
                   objectFit="cover"
                   className="rounded-t-lg"
                 />
               </div>
-              <div className="p-4">
+              <div className="p-2">
                 <h2 className="text-lg font-bold mb-2">{caseItem.name}</h2>
-                <p className="text-gray-400 mb-4">{caseItem.description}</p>
               </div>
             </div>
           ))}

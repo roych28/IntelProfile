@@ -1,4 +1,6 @@
-import ThemeToggle from '@/components/layout/ThemeToggle/theme-toggle';
+'use client';
+
+// import ThemeToggle from '@/components/layout/ThemeToggle/theme-toggle';
 import { cn } from '@/lib/utils';
 import { MobileSidebar } from './mobile-sidebar';
 import { UserNav } from './user-nav';
@@ -8,7 +10,7 @@ const authUrl = process.env.NEXTAUTH_URL || 'localhost:3000';
 
 export default function Header() {
   return (
-    <div className="supports-backdrop-blur:bg-background/60 fixed left-0 bg-gray-900 right-0 top-0 z-20 border-b bg-background/95 backdrop-blur">
+    <div className="supports-backdrop-blur:bg-background/60 fixed left-0 bg-gray-900 right-0 top-0 z-20 border-b border-gray-700 backdrop-blur">
       <nav className="flex h-14 items-center justify-between px-4">
         <div className="hidden lg:block">
           <Link
@@ -23,7 +25,7 @@ export default function Header() {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="mr-2 h-6 w-6"
+              className="mr-2 h-6 w-6 text-blue-400 hover:text-blue-500"
             >
               <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
             </svg>
@@ -35,7 +37,6 @@ export default function Header() {
 
         <div className="flex items-center gap-2">
           <UserNav />
-          <ThemeToggle />
         </div>
       </nav>
     </div>
