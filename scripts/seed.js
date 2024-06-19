@@ -115,9 +115,14 @@ async function seedIdentifiers(client) {
         type TEXT NOT NULL,
         query TEXT NOT NULL,
         created_at TIMESTAMPTZ DEFAULT timezone('UTC', now()),
-        updated_at TIMESTAMPTZ DEFAULT timezone('UTC', now())
+        updated_at TIMESTAMPTZ DEFAULT timezone('UTC', now()),
+        results TEXT DEFAULT NULL
       );
     `;
+
+    // const addColumnResults = await client.sql`
+    //   ALTER TABLE identifiers ADD COLUMN results_json JSON DEFAULT NULL;
+    // `;
 
     console.log(`Created "identifiers" table`);
 
@@ -135,6 +140,7 @@ async function seedIdentifiers(client) {
     console.log(`Seeded ${insertedIdentifiers.length} identifiers`);
 
     return {
+      //addColumnResults,
       createTable,
       identifiers: insertedIdentifiers,
     };

@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useTheme } from 'next-themes';
-import ThemeToggle from '@/components/layout/ThemeToggle/theme-toggle';
+// import ThemeToggle from '@/components/layout/ThemeToggle/theme-toggle';
 import { cn } from '@/lib/utils';
 import { MobileSidebar } from './mobile-sidebar';
 import { UserNav } from './user-nav';
@@ -14,9 +14,9 @@ export default function Header() {
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {
-    if (!theme) {
+    
       setTheme('dark');
-    }
+    
   }, [theme, setTheme]);
 
   return (

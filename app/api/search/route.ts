@@ -45,7 +45,7 @@ export async function GET(req: Request) {
         'Content-Type': 'application/json',
         'x-api-key': '0b58a68e242e44e4afab4d8ce10133d8', // replace with your actual API key
       },
-      body: JSON.stringify({ query, type }),
+      body: { query, type },
     });
 
     if (!response.ok) {

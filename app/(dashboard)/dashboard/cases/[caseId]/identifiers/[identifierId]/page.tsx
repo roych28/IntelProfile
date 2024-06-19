@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState } from 'react';
 import styles from './SearchPage.module.css';
@@ -19,7 +19,7 @@ interface SearchResult {
   // Add other properties if needed
 }
 
-const IdentifiersPage = () => {
+const IdentifierPage = () => {
   const [query, setQuery] = useState('');
   const [searchType, setSearchType] = useState(searchTypes[0]);
   const [loading, setLoading] = useState(false);
@@ -58,7 +58,7 @@ const IdentifiersPage = () => {
 
   return (
     <div className={styles.searchContainer}>
-      <h1 className={styles.title}>Profile Intelligence Search</h1>
+      <h1 className={styles.title}>Identifier Search</h1>
       <form onSubmit={handleSearch} className={styles.searchForm}>
         <input
           type="text"
@@ -99,4 +99,4 @@ const IdentifiersPage = () => {
   );
 };
 
-export default IdentifiersPage;
+export default IdentifierPage;
