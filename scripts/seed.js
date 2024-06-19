@@ -147,8 +147,8 @@ async function seedIdentifiers(client) {
 async function main() {
   const client = await db.connect();
 
-  //await seedUsers(client);
-  //await seedCases(client);
+  await seedUsers(client);
+  await seedCases(client);
   await seedIdentifiers(client);
 
   await client.end();
