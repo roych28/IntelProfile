@@ -1,6 +1,8 @@
 'use client';
 
-// import ThemeToggle from '@/components/layout/ThemeToggle/theme-toggle';
+import { useEffect } from 'react';
+import { useTheme } from 'next-themes';
+import ThemeToggle from '@/components/layout/ThemeToggle/theme-toggle';
 import { cn } from '@/lib/utils';
 import { MobileSidebar } from './mobile-sidebar';
 import { UserNav } from './user-nav';
@@ -9,14 +11,19 @@ import Link from 'next/link';
 const authUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
 
 export default function Header() {
+  const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    if (!theme) {
+      setTheme('dark');
+    }
+  }, [theme, setTheme]);
+
   return (
     <div className="supports-backdrop-blur:bg-background/60 fixed left-0 bg-gray-900 right-0 top-0 z-20 border-b border-gray-700 backdrop-blur">
       <nav className="flex h-14 items-center justify-between px-4">
         <div className="hidden lg:block">
-          <Link
-            href={authUrl}
-            target="_blank"
-          >
+          <Link href={authUrl} target="_blank">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -37,6 +44,7 @@ export default function Header() {
 
         <div className="flex items-center gap-2">
           <UserNav />
+         
         </div>
       </nav>
     </div>
