@@ -89,9 +89,9 @@ const SearchPage = () => {
         <div className={styles.resultsContainer}>
           <h2>Search Results for {query} ({searchType})</h2>
           <ul>
-            {results.map((result, index) => (
+            {/*results?.map((result, index) => (
               <li key={index}>{result.name}</li>
-            ))}
+            ))*/}
           </ul>
         </div>
       )}

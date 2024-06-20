@@ -22,7 +22,8 @@ export async function GET(req: Request, res: NextApiResponse) {
       GROUP BY cases.id
     `;
     const cases = result.rows;
-
+    await client.end();
+    
     return new Response(JSON.stringify(cases), {
       status: 200,
       headers: {
@@ -43,6 +44,7 @@ export async function POST(req: Request, res: NextApiResponse) {
   try {
     const client = await db.connect();
     const body = await req.json();
+    body.user_id = '2eafca0e-8a0d-4d1b-9d89-2f3c9fa1a57e'; // TODO: hack for as the signin system doesn't work
     const { id, name, user_id } = body;
 
     let result;

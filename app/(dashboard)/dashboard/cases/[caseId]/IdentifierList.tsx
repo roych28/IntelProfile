@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
@@ -9,6 +11,7 @@ import {
   SelectItem,
   SelectValue
 } from '@/components/ui/select';
+import { CheckCircle } from 'lucide-react'; // Import the icon
 
 const identifierImages = {
   'email': '/email.jpg',
@@ -35,7 +38,7 @@ interface IdentifierListProps {
 }
 
 const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifierChange }) => {
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<Record<string, any>>({});
   const [error, setError] = useState('');
 
   const handleSearch = async (id: string) => {
@@ -46,8 +49,8 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
     const encodedType = encodeURIComponent(identifier.type);
 
     try {
-      const response = await fetch(`/api/search?query=${encodedQuery}&type=${encodedType}`, {
-        method: 'GET',
+      const response = await fetch(`/api/search?query=${encodedQuery}&type=${encodedType}&identifierId=${identifier.id}`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -58,11 +61,11 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
       }
 
       const data = await response.json();
-      setResults(data);
+      setResults(prevResults => ({ ...prevResults, [id]: data }));
       setError('');
     } catch (err: any) {
       setError(err.message);
-      setResults([]);
+      setResults(prevResults => ({ ...prevResults, [id]: null }));
     }
   };
 
@@ -72,13 +75,18 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {identifiers.map((identifier) => (
           <div key={identifier.id} className="p-4 border border-gray-700 bg-gray-800 rounded-lg">
-            <Image
-              src={identifierImages[identifier.type]}
-              alt={identifier.type}
-              width={100}
-              height={100}
-              className="object-cover rounded-lg mb-2"
-            />
+            <div className="flex items-center mb-2">
+              <Image
+                src={identifierImages[identifier.type]}
+                alt={identifier.type}
+                width={100}
+                height={100}
+                className="object-cover rounded-lg"
+              />
+              {results[identifier.id] && (
+                <CheckCircle className="text-green-500 w-6 h-6 ml-2" />
+              )}
+            </div>
             <Select
               onValueChange={(value) => onIdentifierChange(identifier.id, 'type', value)}
               value={identifier.type}
@@ -114,13 +122,6 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
         ))}
       </div>
       {error && <div className="text-red-500 mt-4">{error}</div>}
-      <div>
-        {results.map((result, index) => (
-          <div key={index} className="p-2 bg-gray-700 rounded-lg mt-2">
-            {/* Render your result here */}
-          </div>
-        ))}
-      </div>
     </div>
   );
 };

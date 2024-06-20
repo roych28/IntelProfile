@@ -4,6 +4,7 @@ const {
   users,
   cases,
   identifiers,
+  identifierResults, // Make sure you have some seed data for identifier_results
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
@@ -18,7 +19,6 @@ async function seedUsers(client) {
       console.log('Dropped "users" table');
     }
 
-    // Create the "users" table if it doesn't exist
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS users (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -33,7 +33,6 @@ async function seedUsers(client) {
 
     console.log(`Created "users" table`);
 
-    // Insert data into the "users" table
     const insertedUsers = await Promise.all(
       users.map(async (user) => {
         const hashedPassword = await bcrypt.hash(user.password, 10);
@@ -64,7 +63,6 @@ async function seedCases(client) {
       console.log('Dropped "cases" table');
     }
 
-    // Create the "cases" table if it doesn't exist
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS cases (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -77,7 +75,6 @@ async function seedCases(client) {
 
     console.log(`Created "cases" table`);
 
-    // Insert data into the "cases" table
     const insertedCases = await Promise.all(
       cases.map(async (caseItem) => {
         return client.sql`
@@ -107,7 +104,6 @@ async function seedIdentifiers(client) {
       console.log('Dropped "identifiers" table');
     }
 
-    // Create the "identifiers" table if it doesn't exist
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS identifiers (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -116,17 +112,11 @@ async function seedIdentifiers(client) {
         query TEXT NOT NULL,
         created_at TIMESTAMPTZ DEFAULT timezone('UTC', now()),
         updated_at TIMESTAMPTZ DEFAULT timezone('UTC', now()),
-        results TEXT DEFAULT NULL
       );
     `;
 
-    // const addColumnResults = await client.sql`
-    //   ALTER TABLE identifiers ADD COLUMN results_json JSON DEFAULT NULL;
-    // `;
-
     console.log(`Created "identifiers" table`);
 
-    // Insert data into the "identifiers" table
     const insertedIdentifiers = await Promise.all(
       identifiers.map(async (identifier) => {
         return client.sql`
@@ -140,12 +130,54 @@ async function seedIdentifiers(client) {
     console.log(`Seeded ${insertedIdentifiers.length} identifiers`);
 
     return {
-      //addColumnResults,
       createTable,
       identifiers: insertedIdentifiers,
     };
   } catch (error) {
     console.error('Error seeding identifiers:', error);
+    throw error;
+  }
+}
+
+async function seedIdentifierResults(client) {
+  try {
+    if (RECREATE_TABLES) {
+      await client.sql`DROP TABLE IF EXISTS identifier_results CASCADE`;
+      console.log('Dropped "identifier_results" table');
+    }
+
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS identifier_results (
+        id SERIAL PRIMARY KEY,
+        identifier_id UUID NOT NULL,
+        query TEXT NOT NULL,
+        type TEXT NOT NULL,
+        data JSONB NOT NULL,
+        status TEXT DEFAULT NULL,
+        created_at TIMESTAMPTZ DEFAULT timezone('UTC', now())
+      );
+    `;
+
+    console.log(`Created "identifier_results" table`);
+
+    const insertedIdentifierResults = await Promise.all(
+      identifierResults.map(async (result) => {
+        return client.sql`
+        INSERT INTO identifier_results (identifier_id, query, type, results, created_at)
+        VALUES (${result.identifier_id}, ${result.query}, ${result.type}, ${JSON.stringify(result.results)}, timezone('UTC', now()))
+        ON CONFLICT (id) DO NOTHING;
+      `;
+      }),
+    );
+
+    console.log(`Seeded ${insertedIdentifierResults.length} identifier results`);
+
+    return {
+      createTable,
+      identifierResults: insertedIdentifierResults,
+    };
+  } catch (error) {
+    console.error('Error seeding identifier results:', error);
     throw error;
   }
 }
@@ -156,13 +188,11 @@ async function main() {
   await seedUsers(client);
   await seedCases(client);
   await seedIdentifiers(client);
+  await seedIdentifierResults(client);
 
   await client.end();
 }
 
 main().catch((err) => {
-  console.error(
-    'An error occurred while attempting to seed the database:',
-    err,
-  );
+  console.error('An error occurred while attempting to seed the database:', err);
 });

@@ -74,8 +74,11 @@ const identifiers = [
   },
 ];
 
+const identifierResults = [];
+
 module.exports = {
   users,
   cases,
   identifiers,
+  identifierResults
 };
