@@ -67,11 +67,11 @@ export async function POST(req: Request) {
     body.user_id = '2eafca0e-8a0d-4d1b-9d89-2f3c9fa1a57e'; // TODO: hack for as the signin system doesn't work
     const { id, name, user_id, identifiers } = body;
 
-    let caseResult: any;
+    let caseResult;
 
     if (id) {
       // Update the existing case
-      caseResult = await client.sql<Case[]>`
+      caseResult = await client.sql`
         UPDATE cases
         SET name = ${name}, user_id = ${user_id}, updated_at = NOW()
         WHERE id = ${id}
@@ -79,14 +79,19 @@ export async function POST(req: Request) {
       `;
     } else {
       // Create a new case
-      caseResult = await client.sql<Case[]>`
+      caseResult = await client.sql`
         INSERT INTO cases (name, user_id, created_at, updated_at)
         VALUES (${name}, ${user_id}, NOW(), NOW())
         RETURNING *
       `;
     }
 
-    const caseData = caseResult.rows[0] as Case;
+    const caseRows: Case[] = caseResult.rows as Case[];
+    if (caseRows.length === 0) {
+      throw new Error('Failed to retrieve case data');
+    }
+
+    const caseData: Case = caseRows[0];
     const caseId = caseData.id;
 
     if (Array.isArray(identifiers)) {
