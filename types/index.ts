@@ -7,14 +7,16 @@ export interface Identifier {
   query: string;
 }
 
-// 'Email'
-// 'Phone Number'
-// 'Username'
-// 'Fullname'
-// 'Social URL'
-// 'Telegram ID'
-// 'Reverse Image'
-// 'Face and Name'
+export const searchTypes: string[] = [
+  'Email',
+  'Phone Number',
+  'Username',
+  'Fullname',
+  'Social URL',
+  'Telegram ID',
+  'Reverse Image',
+  'Face and Name',
+];
 
 export type Case = {
   id: string;

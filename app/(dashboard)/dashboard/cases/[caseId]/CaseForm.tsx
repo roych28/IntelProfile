@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -12,8 +12,6 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form';
-import { Separator } from '@/components/ui/separator';
-import { Heading } from '@/components/ui/heading';
 import { useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { CaseFormValues, formSchema } from './formSchema';
@@ -22,7 +20,7 @@ import AddIdentifierForm from './AddIdentifierForm';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash } from 'lucide-react'; // Import the Trash icon
 import { Identifier } from '@/types';
- 
+
 interface CaseFormProps {
   initialData?: CaseFormValues | null;
 }
@@ -33,9 +31,8 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   const [loading, setLoading] = useState(false);
   const { caseId } = useParams();
 
-  const title = initialData ? 'Edit Case' : 'Create Case';
   const toastMessage = initialData ? 'Case updated.' : 'Case created.';
-  const action = initialData ? 'Save changes' : 'Create';
+  const action = initialData ? 'Save' : 'Create';
 
   const [identifiers, setIdentifiers] = useState<Identifier[]>(initialData?.identifiers || []);
 
@@ -46,9 +43,16 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
     defaultValues,
   });
 
+  useEffect(() => {
+    if (initialData?.identifiers) {
+      setIdentifiers(initialData.identifiers);
+    }
+  }, [initialData]);
+
   const onSubmit = async (data: CaseFormValues) => {
     try {
       setLoading(true);
+      data.identifiers = identifiers; // Ensure identifiers are included in the form data
       const response = await fetch(`/api/cases`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -59,8 +63,6 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
         throw new Error('Network response was not ok');
       }
 
-      router.refresh();
-      router.push(`/dashboard/cases`);
       toast({
         variant: 'default',
         title: toastMessage,
@@ -120,52 +122,61 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
     form.setValue('identifiers', updatedIdentifiers);
   };
 
+  const goToDetails = (identifierId: string) => {
+    router.push(`/dashboard/cases/${caseId}/identifiers/${identifierId}`);
+  };
+
   return (
     <>
-      <div className="flex items-center justify-between">
-        <Heading title={title} description="" />
-        <div className="flex space-x-4">
+      <div className="flex items-center justify-between mb-4">
+        <AddIdentifierForm onAdd={addIdentifier} />
+        <div className="flex items-center space-x-2">
           {initialData && (
             <Button
               disabled={loading}
               variant="destructive"
               size="sm"
+              className="h-10"
               onClick={onDelete}
             >
-              <Trash className="h-4 w-4" />
+              <Trash className="h-5 w-5" />
             </Button>
           )}
-          <Button disabled={loading} className="bg-blue-500 hover:bg-blue-600" onClick={form.handleSubmit(onSubmit)}>
+          <Button
+            disabled={loading}
+            className="bg-blue-500 hover:bg-blue-600 h-10"
+            onClick={form.handleSubmit(onSubmit)}
+          >
             {action}
           </Button>
         </div>
       </div>
-      <Separator />
-      <div className="max-h-[70vh] overflow-y-auto p-4">
+      <div className="mb-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
-            <div className="gap-8 md:grid md:grid-cols-3">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={loading}
-                        placeholder="Case name"
-                        className="bg-gray-800 text-white border-gray-700"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <IdentifierList identifiers={identifiers} onIdentifierChange={handleIdentifierChange} />
-            <AddIdentifierForm onAdd={addIdentifier} />
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Case Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Case name"
+                      className="bg-gray-800 text-white border-gray-700"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <IdentifierList
+              identifiers={identifiers}
+              onIdentifierChange={handleIdentifierChange}
+              onDetailsClick={goToDetails} // Pass the function for handling details click
+            />
           </form>
         </Form>
       </div>

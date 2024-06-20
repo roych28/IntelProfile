@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState } from 'react';
 import Image from 'next/image';
@@ -28,15 +28,22 @@ const identifierImages: Record<string, string> = {
 interface IdentifierListProps {
   identifiers: Identifier[];
   onIdentifierChange: (id: string, field: string, value: string) => void;
+  onDetailsClick: (identifierId: string) => void;
 }
 
-const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifierChange }) => {
-  const [results, setResults] = useState<Record<string, any>>({});
+const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifierChange, onDetailsClick }) => {
+  const [loadingIds, setLoadingIds] = useState<string[]>([]);
   const [error, setError] = useState('');
 
   const handleSearch = async (id: string) => {
     const identifier = identifiers.find(identifier => identifier.id === id);
     if (!identifier) return;
+
+    if (loadingIds.includes(id)) {
+      return; // Prevent multiple simultaneous searches
+    }
+
+    setLoadingIds(prev => [...prev, id]);
 
     const encodedQuery = encodeURIComponent(identifier.query);
     const encodedType = encodeURIComponent(identifier.type);
@@ -54,11 +61,13 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
       }
 
       const data = await response.json();
-      setResults(prevResults => ({ ...prevResults, [id]: data }));
+      onIdentifierChange(id, 'results', data);
       setError('');
     } catch (err: any) {
       setError(err.message);
-      setResults(prevResults => ({ ...prevResults, [id]: null }));
+      onIdentifierChange(id, 'results', null);
+    } finally {
+      setLoadingIds(prev => prev.filter(loadingId => loadingId !== id));
     }
   };
 
@@ -76,7 +85,7 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
                 height={100}
                 className="object-cover rounded-lg"
               />
-              {results[identifier.id] && (
+              {identifier.results && (
                 <CheckCircle className="text-green-500 w-6 h-6 ml-2" />
               )}
             </div>
@@ -84,7 +93,7 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
               onValueChange={(value) => onIdentifierChange(identifier.id, 'type', value)}
               value={identifier.type}
             >
-              <SelectTrigger className="bg-gray-800 text-white border-gray-700 mb-2" >
+              <SelectTrigger className="bg-gray-800 text-white border-gray-700 mb-2">
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>
               <SelectContent>
@@ -104,13 +113,23 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
               placeholder="Enter query"
               className="bg-gray-800 text-white border-gray-700 mb-2"
             />
-            <Button
-              className="bg-blue-500 hover:bg-blue-600"
-              onClick={() => handleSearch(identifier.id)}
-              type="button"
-            >
-              Search
-            </Button>
+            <div className="flex space-x-2">
+              <Button
+                className={`bg-blue-500 hover:bg-blue-600 ${loadingIds.includes(identifier.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                onClick={() => handleSearch(identifier.id)}
+                type="button"
+                disabled={loadingIds.includes(identifier.id)}
+              >
+                {loadingIds.includes(identifier.id) ? 'Searching...' : 'Search'}
+              </Button>
+              <Button
+                className="bg-green-500 hover:bg-green-600"
+                onClick={() => onDetailsClick(identifier.id)}
+                type="button"
+              >
+                Details
+              </Button>
+            </div>
           </div>
         ))}
       </div>

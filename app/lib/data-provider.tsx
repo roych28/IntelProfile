@@ -6,12 +6,14 @@ import { Case } from '@/types';
 type CasesContextType = {
   cases: Case[];
   getCaseById: (id: string) => Case | undefined;
+  loading: boolean;
 };
 
 const CasesContext = createContext<CasesContextType | undefined>(undefined);
 
 export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cases, setCases] = useState<Case[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchCases = async () => {
@@ -21,6 +23,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setCases(data);
       } catch (error) {
         // console.error('Error fetching cases:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -30,7 +34,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const getCaseById = (id: string) => cases.find(caseItem => caseItem.id === id);
 
   return (
-    <CasesContext.Provider value={{ cases, getCaseById }}>
+    <CasesContext.Provider value={{ cases, getCaseById, loading }}>
       {children}
     </CasesContext.Provider>
   );

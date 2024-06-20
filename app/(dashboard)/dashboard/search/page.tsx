@@ -2,17 +2,7 @@
 
 import { useState } from 'react';
 import styles from './SearchPage.module.css';
-
-const searchTypes = [
-  'Email',
-  'Phone Number',
-  'Username',
-  'Fullname',
-  'Social URL',
-  'Telegram ID',
-  'Reverse Image',
-  'Face and Name',
-];
+import { searchTypes } from '@/types';
 
 interface SearchResult {
   name: string;

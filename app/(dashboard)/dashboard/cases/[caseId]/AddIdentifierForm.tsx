@@ -28,8 +28,7 @@ const AddIdentifierForm: React.FC<AddIdentifierFormProps> = ({ onAdd }) => {
   };
 
   return (
-    <div className="mt-4">
-      <h2 className="text-lg font-semibold">Add New Identifier</h2>
+    
       <div className="flex space-x-4 items-center">
         <Select
           onValueChange={(value) => handleNewIdentifierChange('type', value)}
@@ -59,7 +58,7 @@ const AddIdentifierForm: React.FC<AddIdentifierFormProps> = ({ onAdd }) => {
           Add
         </Button>
       </div>
-    </div>
+   
   );
 };
 

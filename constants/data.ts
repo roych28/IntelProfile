@@ -131,7 +131,7 @@ export const navItems: NavItem[] = [
     label: 'user'
   },*/
   {
-    title: 'Admin',
+    title: 'Cases',
     href: '/dashboard/cases',
     icon: 'employee',
     label: 'employee'
