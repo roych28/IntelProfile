@@ -21,7 +21,8 @@ import IdentifierList from './IdentifierList';
 import AddIdentifierForm from './AddIdentifierForm';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash } from 'lucide-react'; // Import the Trash icon
-
+import { Identifier } from '@/types';
+ 
 interface CaseFormProps {
   initialData?: CaseFormValues | null;
 }
@@ -36,7 +37,7 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   const toastMessage = initialData ? 'Case updated.' : 'Case created.';
   const action = initialData ? 'Save changes' : 'Create';
 
-  const [identifiers, setIdentifiers] = useState(initialData?.identifiers || []);
+  const [identifiers, setIdentifiers] = useState<Identifier[]>(initialData?.identifiers || []);
 
   const defaultValues = initialData ? initialData : { name: '', identifiers: [] };
 
@@ -112,8 +113,9 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   };
 
   const addIdentifier = (type: string, query: string) => {
+    const caseIdString = Array.isArray(caseId) ? caseId[0] : caseId;
     const newId = Math.random().toString();
-    const updatedIdentifiers = [...identifiers, { id: newId, case_id: caseId, type, query }];
+    const updatedIdentifiers = [...identifiers, { id: newId, case_id: caseIdString, type, query }];
     setIdentifiers(updatedIdentifiers);
     form.setValue('identifiers', updatedIdentifiers);
   };

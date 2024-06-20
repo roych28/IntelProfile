@@ -40,12 +40,13 @@ export async function POST(req: Request, res: NextApiResponse) {
       // Insert results into the database
       const result = await client.sql`
         INSERT INTO identifier_results (identifier_id, query, type, data, status, created_at)
-        VALUES (${identifierId}, ${query}, ${type}, ${client.sql(JSON.stringify(data.data))}, ${data.status}, NOW())
+        VALUES (${identifierId}, ${query}, ${type}, ${JSON.stringify(data.data)}, ${data.status}, NOW())
         RETURNING *;
       `;
       insertedRecord = result.rows[0];
 
-      await client.end();
+      // Release the client
+      await client.release();
     }
 
     return new Response(JSON.stringify(insertedRecord || data), {

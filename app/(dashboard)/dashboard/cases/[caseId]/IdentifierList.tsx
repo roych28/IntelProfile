@@ -12,8 +12,9 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { CheckCircle } from 'lucide-react'; // Import the icon
+import { Identifier } from '@/types';
 
-const identifierImages = {
+const identifierImages: Record<string, string> = {
   'email': '/email.jpg',
   'phone': '/phone.jpg',
   'username': '/username.jpg',
@@ -23,14 +24,6 @@ const identifierImages = {
   'reverseimage': '/reverse-image.jpg',
   'facename': '/face-and-name.jpg',
 };
-
-interface Identifier {
-  id: string;
-  case_id: string;
-  type: string;
-  query: string;
-  image_url?: string;
-}
 
 interface IdentifierListProps {
   identifiers: Identifier[];
@@ -73,11 +66,11 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
     <div>
       <h2 className="text-lg font-semibold">Identifiers</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {identifiers.map((identifier) => (
+        {identifiers.map((identifier: Identifier) => (
           <div key={identifier.id} className="p-4 border border-gray-700 bg-gray-800 rounded-lg">
             <div className="flex items-center mb-2">
               <Image
-                src={identifierImages[identifier.type]}
+                src={identifierImages[identifier.type as keyof typeof identifierImages]}
                 alt={identifier.type}
                 width={100}
                 height={100}

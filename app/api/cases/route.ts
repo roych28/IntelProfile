@@ -22,7 +22,7 @@ export async function GET(req: Request, res: NextApiResponse) {
       GROUP BY cases.id
     `;
     const cases = result.rows;
-    await client.end();
+    await client.release();
     
     return new Response(JSON.stringify(cases), {
       status: 200,

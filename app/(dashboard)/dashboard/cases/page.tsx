@@ -21,7 +21,7 @@ const CasesPage: React.FC = () => {
       <header className="bg-gray-800 text-white py-4 px-6 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center h-full">
-            <BreadCrumb items={breadcrumbItems} className="mb-0" />
+            <BreadCrumb items={breadcrumbItems} />
           </div>
           <Link
             href="/dashboard/cases/new"
