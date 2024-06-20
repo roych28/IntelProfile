@@ -106,7 +106,7 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
     }
   };
 
-  const handleIdentifierChange = (id: string, field: string, value: string) => {
+  const handleIdentifierChange = (id: string, field: string, value: string | null) => {
     setIdentifiers((prev) =>
       prev.map((identifier) =>
         identifier.id === id ? { ...identifier, [field]: value } : identifier

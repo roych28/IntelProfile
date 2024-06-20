@@ -5,6 +5,7 @@ export interface Identifier {
   case_id: string;
   type: string;
   query: string;
+  results?: any;
 }
 
 export const searchTypes: string[] = [
@@ -24,6 +25,7 @@ export type Case = {
   user_id: string;
   created_at: string;
   updated_at: string;
+  identifiers?: any;
 };
 
 export interface NavItem {

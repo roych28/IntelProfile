@@ -1,15 +1,15 @@
-import { NextApiResponse, NextApiRequest } from 'next';
+import { NextResponse } from 'next/server';
 import { db } from '@vercel/postgres';
 import dotenv from 'dotenv';
 import { Case, Identifier } from '@/types';
 
 dotenv.config();
 
-export async function GET(req: Request, res: NextApiResponse) {
+export async function GET(req: Request) {
   try {
     const client = await db.connect();
 
-    const result = await client.sql<Case & { identifiers: (Identifier & { results: IdentifierResult[] })[] }[]>`
+    const result = await client.sql<Case & { identifiers: (Identifier & { results: any[] })[] }[]>`
       SELECT
         cases.id,
         cases.name,
@@ -44,14 +44,14 @@ export async function GET(req: Request, res: NextApiResponse) {
     const cases = result.rows;
     await client.release();
 
-    return new Response(JSON.stringify(cases), {
+    return new NextResponse(JSON.stringify(cases), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
       }
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: (error as Error).message }), {
+    return new NextResponse(JSON.stringify({ error: (error as Error).message }), {
       status: 500,
       headers: {
         'Content-Type': 'application/json',
@@ -60,14 +60,14 @@ export async function GET(req: Request, res: NextApiResponse) {
   }  
 }
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req: Request) {
   try {
     const client = await db.connect();
     const body = await req.json();
     body.user_id = '2eafca0e-8a0d-4d1b-9d89-2f3c9fa1a57e'; // TODO: hack for as the signin system doesn't work
     const { id, name, user_id, identifiers } = body;
 
-    let caseResult;
+    let caseResult: any;
 
     if (id) {
       // Update the existing case
@@ -86,7 +86,7 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
       `;
     }
 
-    const caseData = caseResult.rows[0];
+    const caseData = caseResult.rows[0] as Case;
     const caseId = caseData.id;
 
     if (Array.isArray(identifiers)) {
@@ -111,14 +111,14 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     }
 
     await client.release();
-    return new Response(JSON.stringify(caseData), {
+    return new NextResponse(JSON.stringify(caseData), {
       status: id ? 200 : 201,
       headers: {
         'Content-Type': 'application/json',
       }
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: (error as Error).message }), {
+    return new NextResponse(JSON.stringify({ error: (error as Error).message }), {
       status: 500,
       headers: {
         'Content-Type': 'application/json',

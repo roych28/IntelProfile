@@ -5,6 +5,8 @@ import { useParams } from 'next/navigation';
 import { searchTypes } from '@/types';
 import BreadCrumb from '@/components/breadcrumb';
 import { useCases } from '@/app/lib/data-provider';
+import { Identifier } from '@/types';
+
 
 interface SearchResult {
   id: number;
@@ -28,11 +30,11 @@ const IdentifierPage = () => {
   const caseIdString = Array.isArray(caseId) ? caseId[0] : caseId;
   const caseDetails = getCaseById(caseIdString);
 
-  const [identifierDetails, setIdentifierDetails] = useState(null);
+  const [identifierDetails, setIdentifierDetails] = useState<Identifier | null>(null);
 
   useEffect(() => {
     if (caseDetails) {
-      const foundIdentifier = caseDetails.identifiers?.find(identifier => identifier.id === identifierId);
+      const foundIdentifier = caseDetails.identifiers?.find((identifier: Identifier) => identifier.id === identifierId);
       if (foundIdentifier) {
         setIdentifierDetails(foundIdentifier);
         setQuery(foundIdentifier.query);
@@ -77,7 +79,7 @@ const IdentifierPage = () => {
   const breadcrumbItems = [
     { title: 'cases', link: '/dashboard/cases' },
     { title: `${caseDetails?.name || 'loading...'}`, link: `/dashboard/cases/${caseId}` },
-    { title: `${identifierDetails?.name || 'identifier'}`, link: `/dashboard/cases/${caseId}/identifier/${identifierId}` }
+    { title: `${identifierDetails?.id || 'identifier'}`, link: `/dashboard/cases/${caseId}/identifier/${identifierId}` }
   ];
 
   return (

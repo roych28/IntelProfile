@@ -27,7 +27,7 @@ const identifierImages: Record<string, string> = {
 
 interface IdentifierListProps {
   identifiers: Identifier[];
-  onIdentifierChange: (id: string, field: string, value: string) => void;
+  onIdentifierChange: (id: string, field: string, value: string | null) => void;
   onDetailsClick: (identifierId: string) => void;
 }
 
