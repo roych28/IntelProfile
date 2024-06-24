@@ -5,9 +5,17 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCases } from '@/app/lib/data-provider';
-import BreadCrumb from '@/components/breadcrumb';
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '@/components/ui/breadcrumb';
 
 const breadcrumbItems = [{ title: 'Cases', link: '/dashboard/cases' }];
+
 const CasesPage: React.FC = () => {
   const { cases } = useCases();
   const router = useRouter();
@@ -21,7 +29,17 @@ const CasesPage: React.FC = () => {
       <header className="bg-gray-800 text-white py-4 px-6 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex h-full">
-            <BreadCrumb items={breadcrumbItems} />
+          <Breadcrumb className="h">
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="#" prefetch={false}>
+                    Cases
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
           </div>
           <Link
             href="/dashboard/cases/new"

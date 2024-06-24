@@ -22,6 +22,7 @@
     overflow-x: auto;
     padding: 10px 0;
     width: 90%;
+    height: 95PX;
   }
   
   .timelineItem {
@@ -29,11 +30,12 @@
     flex-grow: 1;
     text-align: center;
     margin: 0 20px;
+    font-size: small;
   }
   
   .timelineDot {
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     background-color: #4caf50;
     border: 2px solid #fff;
     border-radius: 50%;
@@ -63,6 +65,7 @@
     font-size: 0.85rem;
     color: #aaa;
     margin-top: 5px;
+    font-size: smaller;
   }
   
   .timeline::before {

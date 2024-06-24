@@ -17,7 +17,6 @@ interface TimelineProps {
 const Timeline: React.FC<TimelineProps> = ({ items }) => {
   return (
     <div className={styles.timelineContainer}>
-      <h2 className={styles.timelineTitle}>Timeline</h2>
       <div className={styles.timeline}>
         {items.map((item) => (
           <div key={item.id} className={styles.timelineItem}>
