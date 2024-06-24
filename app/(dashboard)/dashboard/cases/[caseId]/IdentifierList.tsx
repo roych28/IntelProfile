@@ -72,66 +72,68 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
   };
 
   return (
-    <div>
+    <div className="h-screen flex flex-col">
       <h2 className="text-lg font-semibold">Identifiers</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {identifiers.map((identifier: Identifier) => (
-          <div key={identifier.id} className="p-4 border border-gray-700 bg-gray-800 rounded-lg">
-            <div className="flex items-center mb-2">
-              <Image
-                src={identifierImages[identifier.type as keyof typeof identifierImages]}
-                alt={identifier.type}
-                width={100}
-                height={100}
-                className="object-cover rounded-lg"
+      <div className="flex-1 overflow-auto p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {identifiers.map((identifier: Identifier) => (
+            <div key={identifier.id} className="p-4 border border-gray-700 bg-gray-800 rounded-lg">
+              <div className="flex items-center mb-2">
+                <Image
+                  src={identifierImages[identifier.type as keyof typeof identifierImages]}
+                  alt={identifier.type}
+                  width={100}
+                  height={100}
+                  className="object-cover rounded-lg"
+                />
+                {identifier.results && (
+                  <CheckCircle className="text-green-500 w-6 h-6 ml-2" />
+                )}
+              </div>
+              <Select
+                onValueChange={(value) => onIdentifierChange(identifier.id, 'type', value)}
+                value={identifier.type}
+              >
+                <SelectTrigger className="bg-gray-800 text-white border-gray-700 mb-2">
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="email">Email</SelectItem>
+                  <SelectItem value="phone">Phone</SelectItem>
+                  <SelectItem value="username">Username</SelectItem>
+                  <SelectItem value="fullname">Fullname</SelectItem>
+                  <SelectItem value="socialurl">Social URL</SelectItem>
+                  <SelectItem value="telegramid">Telegram ID</SelectItem>
+                  <SelectItem value="reverseimage">Reverse Image</SelectItem>
+                  <SelectItem value="facename">Face and Name</SelectItem>
+                </SelectContent>
+              </Select>
+              <Input
+                value={identifier.query}
+                onChange={(e) => onIdentifierChange(identifier.id, 'query', e.target.value)}
+                placeholder="Enter query"
+                className="bg-gray-800 text-white border-gray-700 mb-2"
               />
-              {identifier.results && (
-                <CheckCircle className="text-green-500 w-6 h-6 ml-2" />
-              )}
+              <div className="flex space-x-2">
+                <Button
+                  className={`bg-blue-500 hover:bg-blue-600 ${loadingIds.includes(identifier.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  onClick={() => handleSearch(identifier.id)}
+                  type="button"
+                  disabled={loadingIds.includes(identifier.id)}
+                >
+                  {loadingIds.includes(identifier.id) ? 'Searching...' : 'Search'}
+                </Button>
+                <Button
+                  className="bg-green-500 hover:bg-green-600"
+                  onClick={() => onDetailsClick(identifier.id)}
+                  type="button"
+                >
+                  Details
+                </Button>
+              </div>
             </div>
-            <Select
-              onValueChange={(value) => onIdentifierChange(identifier.id, 'type', value)}
-              value={identifier.type}
-            >
-              <SelectTrigger className="bg-gray-800 text-white border-gray-700 mb-2">
-                <SelectValue placeholder="Select type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="email">Email</SelectItem>
-                <SelectItem value="phone">Phone</SelectItem>
-                <SelectItem value="username">Username</SelectItem>
-                <SelectItem value="fullname">Fullname</SelectItem>
-                <SelectItem value="socialurl">Social URL</SelectItem>
-                <SelectItem value="telegramid">Telegram ID</SelectItem>
-                <SelectItem value="reverseimage">Reverse Image</SelectItem>
-                <SelectItem value="facename">Face and Name</SelectItem>
-              </SelectContent>
-            </Select>
-            <Input
-              value={identifier.query}
-              onChange={(e) => onIdentifierChange(identifier.id, 'query', e.target.value)}
-              placeholder="Enter query"
-              className="bg-gray-800 text-white border-gray-700 mb-2"
-            />
-            <div className="flex space-x-2">
-              <Button
-                className={`bg-blue-500 hover:bg-blue-600 ${loadingIds.includes(identifier.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                onClick={() => handleSearch(identifier.id)}
-                type="button"
-                disabled={loadingIds.includes(identifier.id)}
-              >
-                {loadingIds.includes(identifier.id) ? 'Searching...' : 'Search'}
-              </Button>
-              <Button
-                className="bg-green-500 hover:bg-green-600"
-                onClick={() => onDetailsClick(identifier.id)}
-                type="button"
-              >
-                Details
-              </Button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       {error && <div className="text-red-500 mt-4">{error}</div>}
     </div>
