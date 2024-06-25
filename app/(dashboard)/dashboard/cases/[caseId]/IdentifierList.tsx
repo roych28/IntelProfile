@@ -1,143 +1,87 @@
 'use client';
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue
-} from '@/components/ui/select';
-import { CheckCircle } from 'lucide-react'; // Import the icon
-import { Identifier } from '@/types';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
+import { useCases } from '@/app/lib/data-provider';
+import Breadcrumbs from '@/components/breadcrumbs';
+import { IdentifierDetails, CaseDetails } from '@/types';
+import { mergeDataBySource } from '@/app/lib/utils';
+import { renderStatsCards, renderLeaks, renderTimeline, renderSummary, renderProfiles } from '@/components/results-helper-utils';
 
-const identifierImages: Record<string, string> = {
-  'email': '/email.jpg',
-  'phone': '/phone.jpg',
-  'username': '/username.jpg',
-  'fullname': '/fullname.jpg',
-  'socialurl': '/social-url.jpg',
-  'telegramid': '/telegram.jpg',
-  'reverseimage': '/reverse-image.jpg',
-  'facename': '/face-and-name.jpg',
-};
+const IdentifierPage: React.FC = () => {
+  const { caseId, identifierId } = useParams();
+  const [identifierDetails, setIdentifierDetails] = useState<IdentifierDetails | null>(null);
+  const { getCaseById } = useCases();
+  
+  const caseIdString = Array.isArray(caseId) ? caseId[0] : caseId;
+  const caseDetails: CaseDetails | undefined = getCaseById(caseIdString);
 
-interface IdentifierListProps {
-  identifiers: Identifier[];
-  onIdentifierChange: (id: string, field: string, value: string | null) => void;
-  onDetailsClick: (identifierId: string) => void;
-}
-
-const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifierChange, onDetailsClick }) => {
-  const [loadingIds, setLoadingIds] = useState<string[]>([]);
-  const [error, setError] = useState('');
-
-  const handleSearch = async (id: string) => {
-    const identifier = identifiers.find(identifier => identifier.id === id);
-    if (!identifier) return;
-
-    if (loadingIds.includes(id)) {
-      return; // Prevent multiple simultaneous searches
-    }
-
-    setLoadingIds(prev => [...prev, id]);
-
-    const encodedQuery = encodeURIComponent(identifier.query);
-    const encodedType = encodeURIComponent(identifier.type);
-
-    try {
-      const response = await fetch(`/api/search?query=${encodedQuery}&type=${encodedType}&identifierId=${identifier.id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
+  useEffect(() => {
+    if (caseDetails) {
+      const foundIdentifier = caseDetails.identifiers?.find(
+        (identifier: IdentifierDetails) => identifier.id === identifierId
+      );
+      if (foundIdentifier) {
+        setIdentifierDetails(foundIdentifier);
       }
-
-      const data = await response.json();
-      onIdentifierChange(id, 'results', data);
-      setError('');
-    } catch (err: any) {
-      setError(err.message);
-      onIdentifierChange(id, 'results', null);
-    } finally {
-      setLoadingIds(prev => prev.filter(loadingId => loadingId !== id));
     }
-  };
+  }, [caseDetails, identifierId]);
+
+  const mergedSources = mergeDataBySource(identifierDetails?.results?.[0]?.data?.profiles || []);
+  const sourcesScanned = Object.keys(mergedSources).length;
+
+  const breadcrumbItems = [
+    { title: 'Cases', link: '/dashboard/cases' },
+    { title: `${caseDetails?.name || ''}`, link: `/dashboard/cases/${caseId}` },
+    { title: `Identifier ${identifierId}`, link: `/dashboard/cases/${caseId}/identifier/${identifierId}` },
+  ];
 
   return (
-    <div className="h-screen flex flex-col">
-      <h2 className="text-lg font-semibold">Identifiers</h2>
-      <div className="flex-1 overflow-auto p-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {identifiers.map((identifier: Identifier) => (
-            <div key={identifier.id} className="p-4 border border-gray-700 bg-gray-800 rounded-lg">
-              <div className="flex items-center mb-2">
-                <Image
-                  src={identifierImages[identifier.type as keyof typeof identifierImages]}
-                  alt={identifier.type}
-                  width={100}
-                  height={100}
-                  className="object-cover rounded-lg"
-                />
-                {identifier.results && (
-                  <CheckCircle className="text-green-500 w-6 h-6 ml-2" />
-                )}
-              </div>
-              <Select
-                onValueChange={(value) => onIdentifierChange(identifier.id, 'type', value)}
-                value={identifier.type}
-              >
-                <SelectTrigger className="bg-gray-800 text-white border-gray-700 mb-2">
-                  <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="email">Email</SelectItem>
-                  <SelectItem value="phone">Phone</SelectItem>
-                  <SelectItem value="username">Username</SelectItem>
-                  <SelectItem value="fullname">Fullname</SelectItem>
-                  <SelectItem value="socialurl">Social URL</SelectItem>
-                  <SelectItem value="telegramid">Telegram ID</SelectItem>
-                  <SelectItem value="reverseimage">Reverse Image</SelectItem>
-                  <SelectItem value="facename">Face and Name</SelectItem>
-                </SelectContent>
-              </Select>
-              <Input
-                value={identifier.query}
-                onChange={(e) => onIdentifierChange(identifier.id, 'query', e.target.value)}
-                placeholder="Enter query"
-                className="bg-gray-800 text-white border-gray-700 mb-2"
-              />
-              <div className="flex space-x-2">
-                <Button
-                  className={`bg-blue-500 hover:bg-blue-600 ${loadingIds.includes(identifier.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  onClick={() => handleSearch(identifier.id)}
-                  type="button"
-                  disabled={loadingIds.includes(identifier.id)}
-                >
-                  {loadingIds.includes(identifier.id) ? 'Searching...' : 'Search'}
-                </Button>
-                <Button
-                  className="bg-green-500 hover:bg-green-600"
-                  onClick={() => onDetailsClick(identifier.id)}
-                  type="button"
-                >
-                  Details
-                </Button>
-              </div>
-            </div>
-          ))}
+    <div className="bg-gray-900 text-white min-h-screen flex flex-col">
+      <header className="bg-gray-800 text-white py-4 px-6 shadow-md">
+        <div className="container mx-auto flex justify-between items-center">
+          <div className="flex h-full">
+            <Breadcrumbs items={breadcrumbItems} />
+          </div>
         </div>
+      </header>
+      <div className="flex-1 max-h-96 overflow-y-auto p-6">
+        {renderStatsCards(sourcesScanned)}
+        {identifierDetails ? (
+          <>
+            {renderSummary(identifierDetails)}
+            {identifierDetails?.results?.[0]?.data?.leaks && identifierDetails.results[0].data.leaks.length > 0 && (
+              <>
+                <div className="col-span-2">
+                  {renderTimeline(identifierDetails.results[0].data.leaks)}
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="col-span-1">
+                    <h2 className="text-xl font-semibold mb-2">Breached Accounts</h2>
+                    {renderLeaks(identifierDetails.results[0].data.leaks)}
+                  </div>
+                  <div className="col-span-1">
+                    <h2 className="text-xl font-semibold mb-2">Profile Pictures</h2>
+                    {identifierDetails?.results?.[0]?.data?.profiles?.length > 0 && (
+                      <div className="grid grid-cols-1 gap-4">
+                        {renderProfiles(identifierDetails?.results?.[0]?.data?.profiles)}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+          </>
+        ) : (
+          caseDetails ? (
+            <div className="text-red-500">Identifier not found.</div>
+          ) : (
+            <div className="text-yellow-500">Loading case details...</div>
+          )
+        )}
       </div>
-      {error && <div className="text-red-500 mt-4">{error}</div>}
     </div>
   );
 };
 
-export default IdentifierList;
+export default IdentifierPage;

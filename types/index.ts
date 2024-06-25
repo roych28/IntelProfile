@@ -58,3 +58,47 @@ export interface FooterItem {
 export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;
+
+export interface IdentifierDetails {
+  id: string;
+  query: string;
+  type: string;
+  status: string;
+  created_at: string;
+  results?: {
+    data?: {
+      profiles?: Profile[];
+      leaks?: Leak[];
+      pictures?: {
+        picture: string;
+        source: string;
+      }[];
+    };
+  }[];
+}
+
+export interface Profile {
+  source: string;
+  email: string;
+  username: string;
+  firstname: string;
+  lastname: string;
+  city: string;
+  profile_pic: string;
+}
+
+export interface Leak {
+  title: string;
+  date: number;
+  url: string;
+}
+
+export interface CaseDetails {
+  name: string;
+  identifiers?: IdentifierDetails[];
+}
+
+export interface MergedData {
+  [key: string]: Profile & { count: number };
+}
+
