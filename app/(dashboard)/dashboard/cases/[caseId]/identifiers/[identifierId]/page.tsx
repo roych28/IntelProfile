@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useCases } from '@/app/lib/data-provider';
-import Breadcrumbs from '@/components/Breadcrumbs';
+import Breadcrumbs from '@/components/breadcrumbs';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import Timeline from '@/components/ui/Timeline';
 import { MagnifyingGlassIcon, PersonIcon, GroupIcon, GlobeIcon } from '@radix-ui/react-icons';
