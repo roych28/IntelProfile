@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { useCases } from '@/app/lib/data-provider';
 import Breadcrumbs from '@/components/breadcrumbs';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import Timeline from '@/components/ui/Timeline';
+import Timeline from '@/components/ui/timeline';
 import { MagnifyingGlassIcon, PersonIcon, GroupIcon, GlobeIcon } from '@radix-ui/react-icons';
 import dayjs from 'dayjs';
 
