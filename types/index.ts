@@ -102,3 +102,11 @@ export interface MergedData {
   [key: string]: Profile & { count: number };
 }
 
+export type StatsData = {
+  sourcesScanned: number;
+  names: number;
+  usernames: number;
+  totalAccounts: number;
+  countries: number;
+};
+

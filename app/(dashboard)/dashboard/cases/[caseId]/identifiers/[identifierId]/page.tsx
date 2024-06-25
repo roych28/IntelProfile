@@ -36,6 +36,14 @@ const IdentifierPage: React.FC = () => {
     { title: `Identifier ${identifierId}`, link: `/dashboard/cases/${caseId}/identifier/${identifierId}` },
   ];
 
+  const statsData = {
+    sourcesScanned,
+    names: -1,
+    usernames: -1,
+    totalAccounts: -1,
+    countries: -1,
+  };
+
   return (
     <div className="bg-gray-900 text-white min-h-screen flex flex-col">
       <header className="bg-gray-800 text-white py-4 px-6 shadow-md">
@@ -46,7 +54,7 @@ const IdentifierPage: React.FC = () => {
         </div>
       </header>
       <div className="flex-1 max-h-screen overflow-y-auto p-6">
-        {renderStatsCards(sourcesScanned)}
+      {renderStatsCards(statsData)}
         {identifierDetails ? (
           <>
             {renderSummary(identifierDetails)}
