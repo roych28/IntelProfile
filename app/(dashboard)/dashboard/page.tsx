@@ -588,7 +588,7 @@ export default function Component() {
   )
 }
 
-function ChevronLeftIcon(props) {
+function ChevronLeftIcon(props: any) {
   return (
     <svg
       {...props}
@@ -608,7 +608,7 @@ function ChevronLeftIcon(props) {
 }
 
 
-function ChevronRightIcon(props) {
+function ChevronRightIcon(props: any) {
   return (
     <svg
       {...props}
@@ -628,7 +628,7 @@ function ChevronRightIcon(props) {
 }
 
 
-function CopyIcon(props) {
+function CopyIcon(props: any) {
   return (
     <svg
       {...props}
@@ -649,7 +649,7 @@ function CopyIcon(props) {
 }
 
 
-function CreditCardIcon(props) {
+function CreditCardIcon(props: any) {
   return (
     <svg
       {...props}
@@ -670,7 +670,7 @@ function CreditCardIcon(props) {
 }
 
 
-function FileIcon(props) {
+function FileIcon(props: any) {
   return (
     <svg
       {...props}
@@ -691,7 +691,7 @@ function FileIcon(props) {
 }
 
 
-function HomeIcon(props) {
+function HomeIcon(props: any) {
   return (
     <svg
       {...props}
@@ -712,7 +712,7 @@ function HomeIcon(props) {
 }
 
 
-function LineChartIcon(props) {
+function LineChartIcon(props: any) {
   return (
     <svg
       {...props}
@@ -733,7 +733,7 @@ function LineChartIcon(props) {
 }
 
 
-function ListFilterIcon(props) {
+function ListFilterIcon(props: any) {
   return (
     <svg
       {...props}
@@ -755,7 +755,7 @@ function ListFilterIcon(props) {
 }
 
 
-function MoveVerticalIcon(props) {
+function MoveVerticalIcon(props: any) {
   return (
     <svg
       {...props}
@@ -777,7 +777,7 @@ function MoveVerticalIcon(props) {
 }
 
 
-function Package2Icon(props) {
+function Package2Icon(props: any) {
   return (
     <svg
       {...props}
@@ -799,7 +799,7 @@ function Package2Icon(props) {
 }
 
 
-function PackageIcon(props) {
+function PackageIcon(props: any) {
   return (
     <svg
       {...props}
@@ -822,7 +822,7 @@ function PackageIcon(props) {
 }
 
 
-function PanelLeftIcon(props) {
+function PanelLeftIcon(props: any) {
   return (
     <svg
       {...props}
@@ -843,7 +843,7 @@ function PanelLeftIcon(props) {
 }
 
 
-function SearchIcon(props) {
+function SearchIcon(props: any) {
   return (
     <svg
       {...props}
@@ -864,7 +864,7 @@ function SearchIcon(props) {
 }
 
 
-function SettingsIcon(props) {
+function SettingsIcon(props: any) {
   return (
     <svg
       {...props}
@@ -885,7 +885,7 @@ function SettingsIcon(props) {
 }
 
 
-function ShoppingCartIcon(props) {
+function ShoppingCartIcon(props: any) {
   return (
     <svg
       {...props}
@@ -907,7 +907,7 @@ function ShoppingCartIcon(props) {
 }
 
 
-function TruckIcon(props) {
+function TruckIcon(props: any) {
   return (
     <svg
       {...props}
@@ -931,7 +931,7 @@ function TruckIcon(props) {
 }
 
 
-function UsersIcon(props) {
+function UsersIcon(props: any) {
   return (
     <svg
       {...props}

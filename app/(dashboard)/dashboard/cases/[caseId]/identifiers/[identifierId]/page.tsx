@@ -45,7 +45,7 @@ const IdentifierPage: React.FC = () => {
           </div>
         </div>
       </header>
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 max-h-screen overflow-y-auto p-6">
         {renderStatsCards(sourcesScanned)}
         {identifierDetails ? (
           <>
@@ -62,9 +62,9 @@ const IdentifierPage: React.FC = () => {
                   </div>
                   <div className="col-span-1">
                     <h2 className="text-xl font-semibold mb-2">Profile Pictures</h2>
-                    {identifierDetails?.results?.[0]?.data?.profiles?.length > 0 && (
+                    {identifierDetails.results[0].data.profiles && identifierDetails.results[0].data.profiles.length > 0 && (
                       <div className="grid grid-cols-1 gap-4">
-                        {renderProfiles(identifierDetails?.results?.[0]?.data?.profiles)}
+                        {renderProfiles(identifierDetails.results[0].data.profiles)}
                       </div>
                     )}
                   </div>

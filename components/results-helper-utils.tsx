@@ -33,43 +33,44 @@ export const renderProfiles = (profiles: Profile[]): JSX.Element[] => {
 
 export const renderStatsCards = (sourcesScanned: number): JSX.Element => (
   <div className="flex space-x-4 mb-4">
-    <Card className="flex-1 p-1 flex items-center">
+    <Card className="flex-1 pt-2 pl-2 flex items-center h-14">
       <MagnifyingGlassIcon className="text-lg mr-2" />
       <CardContent className="text-sm p-2 pt-0">
-        <p>Sources Scanned</p>
+        <p className="truncate">Sources Scanned</p>
         <p className="font-bold">{sourcesScanned}</p>
       </CardContent>
     </Card>
-    <Card className="flex-1 p-1 flex items-center">
+    <Card className="flex-1 pt-2 pl-2 flex items-center h-14">
       <PersonIcon className="text-lg mr-2" />
       <CardContent className="text-sm p-2 pt-0">
-        <p>Names</p>
+        <p className="truncate">Names</p>
         <p className="font-bold">3</p>
       </CardContent>
     </Card>
-    <Card className="flex-1 p-4 flex items-center">
+    <Card className="flex-1 pt-2 pl-2 flex items-center h-14">
       <GroupIcon className="text-lg mr-2" />
       <CardContent className="text-sm p-2 pt-0">
-        <p>Usernames</p>
+        <p className="truncate">Usernames</p>
         <p className="font-bold">2</p>
       </CardContent>
     </Card>
-    <Card className="flex-1 p-4 flex items-center">
+    <Card className="flex-1 pt-2 pl-2 flex items-center h-14">
       <GroupIcon className="text-lg mr-2" />
       <CardContent className="text-sm p-2 pt-0">
-        <p>Total Accounts</p>
+        <p className="truncate">Total Accounts</p>
         <p className="font-bold">20</p>
       </CardContent>
     </Card>
-    <Card className="flex-1 p-4 flex items-center">
+    <Card className="flex-1 pt-2 pl-2 flex items-center h-14">
       <GlobeIcon className="text-lg mr-2" />
       <CardContent className="text-sm p-2 pt-0">
-        <p>Countries</p>
+        <p className="truncate">Countries</p>
         <p className="font-bold">1</p>
       </CardContent>
     </Card>
   </div>
 );
+
 
 export const renderLeaks = (leaks: Leak[]): JSX.Element[] => {
   return leaks.map((leak, index) => (
