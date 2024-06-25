@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useCases } from '@/app/lib/data-provider';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/Card';
+import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import Timeline from '@/components/ui/Timeline';
-import { MagnifyingGlassIcon, PersonIcon, PeopleIcon, GroupIcon, GlobeIcon } from '@radix-ui/react-icons';
+import { MagnifyingGlassIcon, PersonIcon, GroupIcon, GlobeIcon } from '@radix-ui/react-icons';
 import dayjs from 'dayjs';
 
 interface IdentifierDetails {
