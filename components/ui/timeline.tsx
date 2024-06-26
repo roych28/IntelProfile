@@ -8,6 +8,7 @@ interface TimelineItem {
   id: number;
   content: string;
   start: string;
+  category: string;
 }
 
 interface TimelineProps {
@@ -15,17 +16,37 @@ interface TimelineProps {
 }
 
 const Timeline: React.FC<TimelineProps> = ({ items }) => {
+  const currentYear = dayjs().year();
+  const startYear = currentYear - 10;
+  const years = [...Array(currentYear - startYear + 1)].map((_, index) => startYear + index);
+  const categories = ['Last Seen', 'Created', 'Hibp', 'Google Reviews', 'Maps'];
+
   return (
     <div className={styles.timelineContainer}>
-      <div className={styles.timeline}>
-        {items.map((item) => (
-          <div key={item.id} className={styles.timelineItem}>
-            <div className={styles.timelineDot}></div>
-            <div className={styles.timelineContent}>
-              <p className={styles.timelineText}>{item.content}</p>
-              <time className={styles.timelineTime}>{new Date(item.start).toLocaleDateString()}</time>
-            </div>
-          </div>
+      <div className={styles.timelineGrid}>
+        <div className={styles.emptyCell}></div>
+        {years.map(year => (
+          <div key={year} className={styles.yearLabel}>{year}</div>
+        ))}
+        {categories.map(category => (
+          <React.Fragment key={category}>
+            <div className={styles.categoryLabel}>{category}</div>
+            {years.map(year => (
+              <div key={`${year}-${category}`} className={styles.yearCategory}>
+                {items
+                  .filter(item => dayjs(item.start).year() === year && item.category === category)
+                  .map(item => (
+                    <div key={item.id} className={styles.timelineItem}>
+                      <div className={styles.timelineDot}></div>
+                      <div className={styles.timelineContent}>
+                        <p className={styles.timelineText}>{item.content}</p>
+                        <time className={styles.timelineTime}>{dayjs(item.start).format('MMM DD')}</time>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            ))}
+          </React.Fragment>
         ))}
       </div>
     </div>

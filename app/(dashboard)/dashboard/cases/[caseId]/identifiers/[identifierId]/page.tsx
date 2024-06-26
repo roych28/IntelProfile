@@ -65,11 +65,9 @@ const IdentifierPage: React.FC = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="col-span-1">
-                    <h2 className="text-xl font-semibold mb-2">Breached Accounts</h2>
                     {renderLeaks(identifierDetails.results[0].data.leaks)}
                   </div>
                   <div className="col-span-1">
-                    <h2 className="text-xl font-semibold mb-2">Profile Pictures</h2>
                     {identifierDetails.results[0].data.profiles && identifierDetails.results[0].data.profiles.length > 0 && (
                       <div className="grid grid-cols-1 gap-4">
                         {renderProfiles(identifierDetails.results[0].data.profiles)}

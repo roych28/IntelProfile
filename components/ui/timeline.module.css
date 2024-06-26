@@ -9,34 +9,65 @@
     margin-bottom: 20px;
   }
   
-  .timelineTitle {
-    color: #ffffff;
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: center;
+  .timelineGrid {
+    display: grid;
+    grid-template-columns: 150px repeat(11, 1fr);
+    grid-template-rows: auto repeat(5, auto);
+    gap: 10px;
+    width: 100%;
+    border: 1px solid #303030;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #1e1e2d;
+    color: #fff;
   }
   
-  .timeline {
+  .emptyCell {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    background-color: transparent;
+  }
+  
+  .yearLabel {
     display: flex;
-    overflow-x: auto;
-    padding: 10px 0;
-    width: 90%;
-    height: 95PX;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    background-color: #2e2e2e;
+    grid-row: 1 / 2;
+  }
+  
+  .categoryLabel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    background-color: #2e2e2e;
+    grid-column: 1 / 2;
+  }
+  
+  .yearCategory {
+    position: relative;
+    border-top: 1px solid #303030;
   }
   
   .timelineItem {
     position: relative;
-    flex-grow: 1;
-    text-align: center;
-    margin: 0 20px;
-    font-size: small;
+    margin: 10px;
   }
   
   .timelineDot {
     width: 15px;
     height: 15px;
-    background-color: #4caf50;
+    background-color: #ff6347;
     border: 2px solid #fff;
     border-radius: 50%;
     margin: 0 auto;
@@ -46,14 +77,14 @@
   
   .timelineContent {
     position: absolute;
-    top: 30px;
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background: #2a2a3b;
-    color: #fff;
+    background: rgba(34, 34, 51, 0.85);
+    color: #00ffcc;
     padding: 5px 10px;
     border-radius: 5px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
   }
   
   .timelineText {
@@ -63,19 +94,7 @@
   .timelineTime {
     display: block;
     font-size: 0.85rem;
-    color: #aaa;
+    color: #00ffcc;
     margin-top: 5px;
-    font-size: smaller;
-  }
-  
-  .timeline::before {
-    content: '';
-    position: absolute;
-    top: 15px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #4caf50;
-    z-index: 1;
   }
   

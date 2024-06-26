@@ -1,35 +1,55 @@
 import React from 'react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import Timeline from '@/components/ui/timeline';
+import { Button } from '@/components/ui/button'
 import { MagnifyingGlassIcon, PersonIcon, GroupIcon, GlobeIcon } from '@radix-ui/react-icons';
 import dayjs from 'dayjs';
 import { Leak, IdentifierDetails, Profile, StatsData } from '@/types';
+import { DownloadIcon } from '@radix-ui/react-icons';
 
 export const renderProfiles = (profiles: Profile[]): JSX.Element[] => {
-  return profiles.map((profile, index) => (
-    <Card key={index} className="mb-4">
-      <CardHeader>
-        <CardTitle>{profile.source}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p><strong>Email:</strong> {profile.email}</p>
-        <p><strong>Username:</strong> {profile.username}</p>
-        <p><strong>First Name:</strong> {profile.firstname}</p>
-        <p><strong>Last Name:</strong> {profile.lastname}</p>
-        <p><strong>City:</strong> {profile.city}</p>
-        {profile.profile_pic && (
-          <div className="mt-4 text-center">
-            <img
-              src={profile.profile_pic}
-              alt={`${profile.source} profile`}
-              className="rounded-full w-24 h-24 object-cover mx-auto"
-            />
+  return (
+    <div className="profile-list">
+      <Card className="">
+        <CardHeader>
+          <CardTitle className="text-lg font-semibold">Profile Pictures</CardTitle>
+          <p className="">Image assets used by the identified profile</p>
+          <hr />
+        </CardHeader>
+        <CardContent>
+          <ul className="list-unstyled">
+            {profiles
+              .filter(profile => profile.profile_pic)  // Only include profiles with profile pictures
+              .map((profile, index) => (
+                <li key={index} className="flex justify-between items-center mb-3">
+                  <div className="flex items-center">
+                    <img
+                      src={profile.profile_pic}
+                      alt={`${profile.source} profile`}
+                      className="rounded-full mr-3"
+                      style={{ width: '40px', height: '40px' }}
+                    />
+                    <span>{profile.source}</span>
+                  </div>
+                  <a href={profile.profile_pic} download className="p-0 flex items-center">
+                    <DownloadIcon className="text-dark" />
+                  </a>
+                </li>
+              ))}
+          </ul>
+          <hr />
+          <div className="flex justify-end mt-3">
+            <Button className="btn btn-dark">Download All</Button>
           </div>
-        )}
-      </CardContent>
-    </Card>
-  ));
+        </CardContent>
+      </Card>
+    </div>
+  );
 };
+
+
+
+
 
 export const renderStatsCards = (data: StatsData): JSX.Element => (
   <div className="flex space-x-4 mb-4">
@@ -73,24 +93,39 @@ export const renderStatsCards = (data: StatsData): JSX.Element => (
 
 
 export const renderLeaks = (leaks: Leak[]): JSX.Element[] => {
-  return leaks.map((leak, index) => (
-    <Card key={index} className="mb-4">
-      <CardHeader>
-        <CardTitle>{leak.title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p><strong>URL:</strong> {leak.url || 'N/A'}</p>
-        <p><strong>Date:</strong> {new Date(leak.date * 1000).toLocaleDateString()}</p>
-      </CardContent>
-    </Card>
-  ));
+  return (
+    <div className="leaks-list">
+      <Card className="">
+        <CardHeader>
+          <CardTitle className="text-lg font-semibold">Breached Accounts</CardTitle>
+          <p className="">List of detected compromised accounts</p>
+          <hr />
+        </CardHeader>
+        <CardContent>
+          <ul className="list-unstyled">
+            {leaks.map((leak, index) => (
+              <li key={index} className="flex justify-between items-center mb-3">
+                <div className="flex flex-col">
+                  <span><strong>Title:</strong> {leak.title}</span>
+                  <span><strong>URL:</strong> {leak.url || 'N/A'}</span>
+                  <span><strong>Date:</strong> {new Date(leak.date * 1000).toLocaleDateString()}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+    </div>
+  );
 };
+
 
 export const renderTimeline = (leaks: Leak[]): JSX.Element => {
   const items = leaks.map((leak, index) => ({
     id: index + 1,
     content: leak.title,
     start: dayjs(leak.date * 1000).toISOString(),
+    category: 'Hibp'
   }));
 
   return (
@@ -103,14 +138,12 @@ export const renderTimeline = (leaks: Leak[]): JSX.Element => {
 export const renderSummary = (details: IdentifierDetails): JSX.Element => (
   <Card className="mb-4">
     <CardHeader>
-      <CardTitle>Summary</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <p><strong>Query:</strong> {details.query}</p>
+    <p><strong>Query:</strong> {details.query}</p>
       <p><strong>Type:</strong> {details.type}</p>
-      <p><strong>Status:</strong> {details.status}</p>
+      <p><strong>Status:</strong> {details.results?.[0].status}</p>
       <p><strong>Created At:</strong> {new Date(details.created_at).toLocaleString()}</p>
-    </CardContent>
+    </CardHeader>
+   
   </Card>
 );
 
