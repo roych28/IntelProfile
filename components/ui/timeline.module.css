@@ -19,6 +19,7 @@
     border-radius: 10px;
     background-color: #1e1e2d;
     color: #fff;
+    position: relative;
   }
   
   .emptyCell {
@@ -62,8 +63,13 @@
   }
   
   .timelineItem {
-    position: relative;
-    margin: 5px;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    flex-direction: column;
   }
   
   .timelineContent {
@@ -73,20 +79,32 @@
     justify-content: space-between;
     background: #2a2a3b;
     color: #fff;
-    padding: 5px 10px;
+    padding: 0px 10px;
     border-radius: 5px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    font-size: 0.9rem; /* Make the font a little smaller */
+    font-size: 0.9rem;
+    margin-left: 10px;
+    z-index: 1;
   }
   
   .timelineText {
     margin: 0;
-    font-size: 0.9rem; /* Make the font a little smaller */
+    font-size: 0.9rem;
   }
   
   .timelineTime {
-    font-size: 0.75rem; /* Make the font smaller */
+    font-size: 0.75rem;
     color: #aaa;
     margin-top: 5px;
+  }
+  
+  .timelineLine {
+    width: 2px;
+    background-color: #aaa;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 0;
   }
   

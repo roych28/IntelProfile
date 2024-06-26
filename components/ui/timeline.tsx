@@ -35,14 +35,19 @@ const Timeline: React.FC<TimelineProps> = ({ items }) => {
               <div key={`${year}-${category}`} className={styles.yearCategory}>
                 {items
                   .filter(item => dayjs(item.start).year() === year && item.category === category)
-                  .map(item => (
-                    <div key={item.id} className={styles.timelineItem}>
-                      <div className={styles.timelineContent}>
-                        <p className={styles.timelineText}>{item.content}</p>
-                        <time className={styles.timelineTime}>{dayjs(item.start).format('MMM DD')}</time>
+                  .map(item => {
+                    const month = dayjs(item.start).month();
+                    const position = (month / 11) * 1; // Position based on month
+                    return (
+                      <div key={item.id} className={styles.timelineItem} style={{ top: `${position}% - 1rem` }}>
+                        <div className={styles.timelineContent}>
+                          <p className={styles.timelineText}>{item.content}</p>
+                          <time className={styles.timelineTime}>{dayjs(item.start).format('MMM DD')}</time>
+                        </div>
+                        <div className={styles.timelineLine} style={{ height: `calc(${position}% - 12.5rem)` }}></div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
               </div>
             ))}
           </React.Fragment>
