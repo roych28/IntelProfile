@@ -138,12 +138,11 @@ export const renderTimeline = (leaks: Leak[]): JSX.Element => {
 export const renderSummary = (details: IdentifierDetails): JSX.Element => (
   <Card className="mb-4 custom-card">
     <CardHeader>
-    <p><strong>Query:</strong> {details.query}</p>
+      <p><strong>Query:</strong> {details.query}</p>
       <p><strong>Type:</strong> {details.type}</p>
-      <p><strong>Status:</strong> {details.results?.[0].status}</p>
+      <p><strong>Status:</strong> {details.results?.[0]?.data?.status}</p>
       <p><strong>Created At:</strong> {new Date(details.created_at).toLocaleString()}</p>
     </CardHeader>
-   
   </Card>
 );
 
