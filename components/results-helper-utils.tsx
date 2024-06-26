@@ -7,10 +7,10 @@ import dayjs from 'dayjs';
 import { Leak, IdentifierDetails, Profile, StatsData } from '@/types';
 import { DownloadIcon } from '@radix-ui/react-icons';
 
-export const renderProfiles = (profiles: Profile[]): JSX.Element[] => {
+export const renderProfiles = (profiles: Profile[]): JSX.Element => {
   return (
     <div className="profile-list">
-      <Card className="">
+      <Card className="custom-card">
         <CardHeader>
           <CardTitle className="text-lg font-semibold">Profile Pictures</CardTitle>
           <p className="">Image assets used by the identified profile</p>
@@ -53,35 +53,35 @@ export const renderProfiles = (profiles: Profile[]): JSX.Element[] => {
 
 export const renderStatsCards = (data: StatsData): JSX.Element => (
   <div className="flex space-x-4 mb-4">
-    <Card className="flex-1 pt-2 pl-2 flex items-center h-14">
+    <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
       <MagnifyingGlassIcon className="text-lg mr-2" />
       <CardContent className="text-sm p-2 pt-0">
         <p className="truncate">Sources Scanned</p>
         <p className="font-bold">{data.sourcesScanned}</p>
       </CardContent>
     </Card>
-    <Card className="flex-1 pt-2 pl-2 flex items-center h-14">
+    <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
       <PersonIcon className="text-lg mr-2" />
       <CardContent className="text-sm p-2 pt-0">
         <p className="truncate">Names</p>
         <p className="font-bold">{data.names}</p>
       </CardContent>
     </Card>
-    <Card className="flex-1 pt-2 pl-2 flex items-center h-14">
+    <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
       <GroupIcon className="text-lg mr-2" />
       <CardContent className="text-sm p-2 pt-0">
         <p className="truncate">Usernames</p>
         <p className="font-bold">{data.usernames}</p>
       </CardContent>
     </Card>
-    <Card className="flex-1 pt-2 pl-2 flex items-center h-14">
+    <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
       <GroupIcon className="text-lg mr-2" />
       <CardContent className="text-sm p-2 pt-0">
         <p className="truncate">Total Accounts</p>
         <p className="font-bold">{data.totalAccounts}</p>
       </CardContent>
     </Card>
-    <Card className="flex-1 pt-2 pl-2 flex items-center h-14">
+    <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
       <GlobeIcon className="text-lg mr-2" />
       <CardContent className="text-sm p-2 pt-0">
         <p className="truncate">Countries</p>
@@ -92,10 +92,10 @@ export const renderStatsCards = (data: StatsData): JSX.Element => (
 );
 
 
-export const renderLeaks = (leaks: Leak[]): JSX.Element[] => {
+export const renderLeaks = (leaks: Leak[]): JSX.Element => {
   return (
     <div className="leaks-list">
-      <Card className="">
+      <Card className="custom-card">
         <CardHeader>
           <CardTitle className="text-lg font-semibold">Breached Accounts</CardTitle>
           <p className="">List of detected compromised accounts</p>
@@ -136,7 +136,7 @@ export const renderTimeline = (leaks: Leak[]): JSX.Element => {
 };
 
 export const renderSummary = (details: IdentifierDetails): JSX.Element => (
-  <Card className="mb-4">
+  <Card className="mb-4 custom-card">
     <CardHeader>
     <p><strong>Query:</strong> {details.query}</p>
       <p><strong>Type:</strong> {details.type}</p>

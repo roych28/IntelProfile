@@ -63,10 +63,10 @@ export interface IdentifierDetails {
   id: string;
   query: string;
   type: string;
-  status: string;
   created_at: string;
   results?: {
     data?: {
+      status: string;
       profiles?: Profile[];
       leaks?: Leak[];
       pictures?: {

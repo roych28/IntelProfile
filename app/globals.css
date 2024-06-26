@@ -67,3 +67,9 @@
     height: 100dvh;
   }
 }
+
+.custom-card {
+  background-color: #1F2937 !important;
+  color: #ffffff; /* Ensure text is readable against the dark background */
+}
+

@@ -1,22 +1,21 @@
 .timelineContainer {
     width: 100%;
-    padding: 20px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: #1e1e2d;
     border-radius: 10px;
     margin-bottom: 20px;
+    overflow-x: auto;
   }
   
   .timelineGrid {
     display: grid;
-    grid-template-columns: 150px repeat(11, 1fr);
+    grid-template-columns: 150px repeat(10, 1fr);
     grid-template-rows: auto repeat(5, auto);
-    gap: 10px;
+    gap: 0;
     width: 100%;
     border: 1px solid #303030;
-    padding: 20px;
     border-radius: 10px;
     background-color: #1e1e2d;
     color: #fff;
@@ -39,6 +38,7 @@
     padding: 10px;
     background-color: #2e2e2e;
     grid-row: 1 / 2;
+    border-right: 1px solid #303030;
   }
   
   .categoryLabel {
@@ -52,49 +52,41 @@
     padding: 10px;
     background-color: #2e2e2e;
     grid-column: 1 / 2;
+    border-bottom: 1px solid #303030;
   }
   
   .yearCategory {
     position: relative;
-    border-top: 1px solid #303030;
+    border-left: 1px solid #303030;
+    border-bottom: 1px solid #303030;
   }
   
   .timelineItem {
     position: relative;
-    margin: 10px;
-  }
-  
-  .timelineDot {
-    width: 15px;
-    height: 15px;
-    background-color: #ff6347;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    margin: 0 auto;
-    position: relative;
-    z-index: 2;
+    margin: 5px;
   }
   
   .timelineContent {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(34, 34, 51, 0.85);
-    color: #00ffcc;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    background: #2a2a3b;
+    color: #fff;
     padding: 5px 10px;
     border-radius: 5px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem; /* Make the font a little smaller */
   }
   
   .timelineText {
     margin: 0;
+    font-size: 0.9rem; /* Make the font a little smaller */
   }
   
   .timelineTime {
-    display: block;
-    font-size: 0.85rem;
-    color: #00ffcc;
+    font-size: 0.75rem; /* Make the font smaller */
+    color: #aaa;
     margin-top: 5px;
   }
   

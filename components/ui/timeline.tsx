@@ -17,7 +17,7 @@ interface TimelineProps {
 
 const Timeline: React.FC<TimelineProps> = ({ items }) => {
   const currentYear = dayjs().year();
-  const startYear = currentYear - 10;
+  const startYear = Math.min(currentYear - 10, ...items.map(item => dayjs(item.start).year()));
   const years = [...Array(currentYear - startYear + 1)].map((_, index) => startYear + index);
   const categories = ['Last Seen', 'Created', 'Hibp', 'Google Reviews', 'Maps'];
 
@@ -37,7 +37,6 @@ const Timeline: React.FC<TimelineProps> = ({ items }) => {
                   .filter(item => dayjs(item.start).year() === year && item.category === category)
                   .map(item => (
                     <div key={item.id} className={styles.timelineItem}>
-                      <div className={styles.timelineDot}></div>
                       <div className={styles.timelineContent}>
                         <p className={styles.timelineText}>{item.content}</p>
                         <time className={styles.timelineTime}>{dayjs(item.start).format('MMM DD')}</time>
