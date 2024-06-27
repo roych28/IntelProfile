@@ -47,12 +47,8 @@ export const renderProfiles = (profiles: Profile[]): JSX.Element => {
   );
 };
 
-
-
-
-
 export const renderStatsCards = (data: StatsData): JSX.Element => (
-  <div className="flex space-x-4 mb-4">
+  <div className="flex space-x-3 mb-4">
     <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
       <MagnifyingGlassIcon className="text-lg mr-2" />
       <CardContent className="text-sm p-2 pt-0">
@@ -129,9 +125,9 @@ export const renderTimeline = (leaks: Leak[]): JSX.Element => {
   }));
 
   return (
-    <div className="mt-8">
+    <>
       <Timeline items={items} />
-    </div>
+    </>
   );
 };
 
