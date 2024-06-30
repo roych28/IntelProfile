@@ -14,13 +14,11 @@ export default function Header() {
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {
-    
       setTheme('dark');
-    
   }, [theme, setTheme]);
 
   return (
-    <div className="supports-backdrop-blur:bg-background/60 fixed left-0 bg-gray-900 right-0 top-0 z-20 border-b border-gray-700 backdrop-blur">
+    <div className="supports-backdrop-blur:bg-background/60 fixed left-0 bg-background right-0 top-0 z-20 border-b border-gray-700 backdrop-blur">
       <nav className="flex h-14 items-center justify-between px-4">
         <div className="hidden lg:block">
           <Link href={authUrl} target="_blank">

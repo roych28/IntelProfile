@@ -5,16 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCases } from '@/app/lib/data-provider';
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator
-} from '@/components/ui/breadcrumb';
-
-const breadcrumbItems = [{ title: 'Cases', link: '/dashboard/cases' }];
+import PageHeader from '@/components/layout/page-header';
 
 const CasesPage: React.FC = () => {
   const { cases } = useCases();
@@ -24,31 +15,16 @@ const CasesPage: React.FC = () => {
     router.push(`/dashboard/cases/${id}`);
   };
 
+  const breadcrumbItems = [
+    { title: 'Cases', link: '#' },
+  ];
+
   return (
-    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
-      <header className="bg-gray-800 text-white py-4 px-6 shadow-md">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="flex h-full">
-          <Breadcrumb className="h">
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link href="#" prefetch={false}>
-                    Cases
-                  </Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-          </div>
-          <Link
-            href="/dashboard/cases/new"
-            className="inline-flex items-center justify-center px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            New Case
-          </Link>
-        </div>
-      </header>
+    <div className="min-h-screen">
+      <PageHeader
+        breadcrumbItems={breadcrumbItems}
+        button={{ link: '/dashboard/cases/new', text: 'New Case' }}
+      />
       <main className="container mx-auto py-8 px-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {cases.map((caseItem) => (

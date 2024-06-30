@@ -31,8 +31,11 @@ const IdentifierPage: React.FC = () => {
       );
       if (foundIdentifier) {
         setIdentifierDetails(foundIdentifier);
-        const statsCalculated = calculateStats(foundIdentifier.results[0].data.profiles, foundIdentifier.results[0].data.existors);
-        setStatsData(statsCalculated);
+        if( foundIdentifier?.results?.[0]?.data ){
+          const statsCalculated = calculateStats(foundIdentifier.results[0].data.profiles, foundIdentifier.results[0].data.existors);
+          setStatsData(statsCalculated);
+        }
+        
       }
     }
   }, [caseDetails, identifierId]);
@@ -65,8 +68,8 @@ const IdentifierPage: React.FC = () => {
   };
 
   return (
-    <div className="text-white max-h-[96vh] flex flex-col pb-4">
-      <header className="bg-gray-800 text-white py-4 px-6 shadow-md">
+    <div className="max-h-[96vh] flex flex-col pb-4">
+      <header className="py-4 px-6 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex h-full">
             <Breadcrumbs items={breadcrumbItems} />

@@ -9,7 +9,7 @@ import { auth } from '@/auth';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Profile Inteligence',
+  title: 'Profile Intelligence',
   description: 'Profile Intelligence is a web app designed for searching and analyzing profiles for intelligence purposes'
 };
 
@@ -21,7 +21,7 @@ export default async function RootLayout({
   const session = await auth();
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased overflow-hidden`}>
+      <body className={`${inter.className} antialiased bg-background text-foreground`}>
         <NextTopLoader />
         <Providers session={session}>
           <Toaster />
