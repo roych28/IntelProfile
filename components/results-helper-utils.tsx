@@ -4,7 +4,7 @@ import Timeline from '@/components/ui/timeline';
 import { Button } from '@/components/ui/button'
 import { MagnifyingGlassIcon, PersonIcon, GroupIcon, GlobeIcon } from '@radix-ui/react-icons';
 import dayjs from 'dayjs';
-import { Leak, IdentifierDetails, Profile, StatsData } from '@/types';
+import { Leak, IdentifierDetails, Profile, StatsData, identifierImages } from '@/types';
 import { DownloadIcon } from '@radix-ui/react-icons';
 
 export const renderProfiles = (profiles: Profile[]): JSX.Element => {
@@ -13,7 +13,7 @@ export const renderProfiles = (profiles: Profile[]): JSX.Element => {
       <Card className="custom-card">
         <CardHeader>
           <CardTitle className="text-lg font-semibold">Profile Pictures</CardTitle>
-          <p className="">Image assets used by the identified profile</p>
+          <p className="">Image assets used by the identified profile.</p>
           <hr />
         </CardHeader>
         <CardContent>
@@ -87,14 +87,13 @@ export const renderStatsCards = (data: StatsData): JSX.Element => (
   </div>
 );
 
-
 export const renderLeaks = (leaks: Leak[]): JSX.Element => {
   return (
     <div className="leaks-list">
       <Card className="custom-card">
         <CardHeader>
           <CardTitle className="text-lg font-semibold">Breached Accounts</CardTitle>
-          <p className="">List of detected compromised accounts</p>
+          <p className="">List of detected compromised accounts.</p>
           <hr />
         </CardHeader>
         <CardContent>
@@ -143,3 +142,34 @@ export const renderSummary = (details: IdentifierDetails): JSX.Element => (
 );
 
 
+export const renderPartialRecoveryData = (partialRecovery: any[]): JSX.Element => {
+  return (
+    <Card className="custom-card">
+      <CardHeader className="card-header pb-2">
+        <CardTitle className="text-lg font-semibold">Partial Recovery Data</CardTitle>
+      </CardHeader>
+      <hr className="title-underline" />
+      <CardContent>
+        <ul>
+          {partialRecovery.map((item, index) => (
+            <li key={index} className="flex flex-row justify-between items-center mb-3 item-divider">
+              <div className="flex items-center pl-4">
+                <img
+                  src={identifierImages[item.type]}
+                  alt={`${item.type} icon`}
+                  className="rounded-full mr-3 icon-size"
+                />
+              </div>
+              <div className="flex flex-col items-end flex-1 pr-4">
+                <span className="font-semibold">{item.source}</span>
+                <span className="text-sm text-gray-400">
+                  {Array.isArray(item.value) ? item.value.join(', ') : item.value || 'N/A'}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </CardContent>
+    </Card>
+  );
+};

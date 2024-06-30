@@ -12,18 +12,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { CheckCircle } from 'lucide-react'; // Import the icon
-import { Identifier } from '@/types';
-
-const identifierImages: Record<string, string> = {
-  'email': '/email.jpg',
-  'phone': '/phone.jpg',
-  'username': '/username.jpg',
-  'fullname': '/fullname.jpg',
-  'socialurl': '/social-url.jpg',
-  'telegramid': '/telegram.jpg',
-  'reverseimage': '/reverse-image.jpg',
-  'facename': '/face-and-name.jpg',
-};
+import { Identifier, identifierImages } from '@/types';
 
 interface IdentifierListProps {
   identifiers: Identifier[];

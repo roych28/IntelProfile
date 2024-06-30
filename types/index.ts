@@ -38,27 +38,6 @@ export interface NavItem {
   description?: string;
 }
 
-export interface NavItemWithChildren extends NavItem {
-  items: NavItemWithChildren[];
-}
-
-export interface NavItemWithOptionalChildren extends NavItem {
-  items?: NavItemWithChildren[];
-}
-
-export interface FooterItem {
-  title: string;
-  items: {
-    title: string;
-    href: string;
-    external?: boolean;
-  }[];
-}
-
-export type MainNavItem = NavItemWithOptionalChildren;
-
-export type SidebarNavItem = NavItemWithChildren;
-
 export interface IdentifierDetails {
   id: string;
   query: string;
@@ -108,5 +87,16 @@ export type StatsData = {
   usernames: number;
   totalAccounts: number;
   countries: number;
+};
+
+export const identifierImages: Record<string, string> = {
+  'email': '/email.jpg',
+  'phone': '/phone.jpg',
+  'username': '/username.jpg',
+  'fullname': '/fullname.jpg',
+  'socialurl': '/social-url.jpg',
+  'telegramid': '/telegram.jpg',
+  'reverseimage': '/reverse-image.jpg',
+  'facename': '/face-and-name.jpg',
 };
 
