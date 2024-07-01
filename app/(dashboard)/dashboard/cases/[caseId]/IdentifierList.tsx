@@ -43,6 +43,7 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ force: true }),
       });
 
       if (!response.ok) {

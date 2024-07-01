@@ -2,10 +2,9 @@ import React from 'react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import Timeline from '@/components/ui/timeline';
 import { Button } from '@/components/ui/button'
-import { MagnifyingGlassIcon, PersonIcon, GroupIcon, GlobeIcon } from '@radix-ui/react-icons';
+import { MagnifyingGlassIcon, PersonIcon, GroupIcon, GlobeIcon, DownloadIcon, CheckIcon } from '@radix-ui/react-icons';
 import dayjs from 'dayjs';
 import { Leak, Identifier, Profile, StatsData, identifierImages, Existor } from '@/types';
-import { DownloadIcon } from '@radix-ui/react-icons';
 
 export const renderProfilePictures = (profiles: Profile[]): JSX.Element => {
   return (
@@ -269,7 +268,7 @@ export const renderExistors = (existors: Existor[]): JSX.Element => {
                 <span className="mr-4">{existor.source}</span>
               </div>
               <div className="flex justify-end pr-4">
-                <span>Exists</span>
+                <CheckIcon className="w-5 h-5 text-green-500" />
               </div>
             </li>
           ))}
@@ -278,6 +277,7 @@ export const renderExistors = (existors: Existor[]): JSX.Element => {
     </Card>
   );
 };
+
 
 
 

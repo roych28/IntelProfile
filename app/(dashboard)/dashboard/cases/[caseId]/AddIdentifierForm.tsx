@@ -31,22 +31,22 @@ const AddIdentifierForm: React.FC<AddIdentifierFormProps> = ({ onAdd }) => {
     
       <div className="flex space-x-4 items-center">
         <Select
-          onValueChange={(value) => handleNewIdentifierChange('type', value)}
-          value={newIdentifier.type}
-        >
-          <SelectTrigger className="bg-gray-800 text-white border-gray-700 p-2 rounded-lg" >
-            <SelectValue placeholder="Select type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="email">Email</SelectItem>
-            <SelectItem value="phone">Phone</SelectItem>
-            <SelectItem value="username">Username</SelectItem>
-            <SelectItem value="fullname">Fullname</SelectItem>
-            <SelectItem value="socialurl">Social URL</SelectItem>
-            <SelectItem value="telegramid">Telegram ID</SelectItem>
-            <SelectItem value="reverseimage">Reverse Image</SelectItem>
-            <SelectItem value="facename">Face and Name</SelectItem>
-          </SelectContent>
+            onValueChange={(value) => handleNewIdentifierChange('type', value)}
+            value={newIdentifier?.type || ""}
+            >
+            <SelectTrigger className="bg-gray-800 text-white border-gray-700 p-2 rounded-lg">
+                <SelectValue>{newIdentifier?.type ? newIdentifier.type : "Choose type"}</SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem value="email">Email</SelectItem>
+                <SelectItem value="phone">Phone</SelectItem>
+                <SelectItem value="username">Username</SelectItem>
+                <SelectItem value="fullname">Fullname</SelectItem>
+                <SelectItem value="socialurl">Social URL</SelectItem>
+                <SelectItem value="telegramid">Telegram ID</SelectItem>
+                <SelectItem value="reverseimage">Reverse Image</SelectItem>
+                <SelectItem value="facename">Face and Name</SelectItem>
+            </SelectContent>
         </Select>
         <Input
           value={newIdentifier.query}

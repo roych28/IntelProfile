@@ -12,7 +12,12 @@ export async function POST(req: Request, res: NextApiResponse) {
     const type = url.searchParams.get('type');
 
     if (!query || !type) {
-      throw new Error('Missing required parameters');
+      return new Response(JSON.stringify({ error: 'Missing required parameters' }), {
+        status: 400,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
     }
 
     const formData = new FormData();
@@ -27,29 +32,47 @@ export async function POST(req: Request, res: NextApiResponse) {
       body: formData,
     });
 
+    /*const apiUrl = new URL('https://eye-6adaad69fa3d.profileintel.com/api');
+    apiUrl.searchParams.append('query', query);
+    apiUrl.searchParams.append('type', type);
+
+    const response = await fetch(apiUrl.toString(), {
+      method: 'GET',
+      headers: {
+        'x-api-key': '0b58a68e242e44e4afab4d8ce10133d8', // replace with your actual API key
+      },
+    });*/
+
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
     }
 
     const data = await response.json();
 
-    let insertedRecord = null;
+    let updatedRecord = null;
     if (identifierId) {
       const client = await db.connect();
 
-      // Insert results into the database
+      // Upsert results into the database
       const result = await client.sql`
         INSERT INTO identifier_results (identifier_id, query, type, data, status, created_at)
         VALUES (${identifierId}, ${query}, ${type}, ${JSON.stringify(data.data)}, ${data.status}, NOW())
+        ON CONFLICT (identifier_id)
+        DO UPDATE SET
+          query = EXCLUDED.query,
+          type = EXCLUDED.type,
+          data = EXCLUDED.data,
+          status = EXCLUDED.status,
+          created_at = EXCLUDED.created_at
         RETURNING *;
       `;
-      insertedRecord = result.rows[0];
+      updatedRecord = result.rows[0];
 
       // Release the client
       await client.release();
     }
 
-    return new Response(JSON.stringify(insertedRecord || data), {
+    return new Response(JSON.stringify(updatedRecord || data), {
       status: 201,
       headers: {
         'Content-Type': 'application/json',
