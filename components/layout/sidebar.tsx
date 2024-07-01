@@ -19,10 +19,11 @@ export default function Sidebar({ className }: SidebarProps) {
     toggle();
     setTimeout(() => setStatus(false), 500);
   };
+
   return (
     <nav
       className={cn(
-        `relative hidden h-screen flex-none border-r pt-20 md:block`,
+        `relative hidden h-screen flex-none border-r pt-20 md:block bg-[#1A1D30]`,
         status && 'duration-500',
         !isMinimized ? 'w-72' : 'w-[72px]',
         className
@@ -30,7 +31,7 @@ export default function Sidebar({ className }: SidebarProps) {
     >
       <ChevronLeft
         className={cn(
-          'absolute -right-3 top-16 cursor-pointer rounded-full border bg-background text-3xl text-foreground',
+          'absolute -right-3 top-16 cursor-pointer rounded-full border bg-[#1A1D30] text-3xl text-foreground',
           isMinimized && 'rotate-180'
         )}
         onClick={handleToggle}

@@ -1,11 +1,31 @@
 import { Icons } from '@/components/icons';
 
+export interface Existor {
+  exists: boolean;
+  source: string;
+};
+
 export interface Identifier {
   id: string;
   case_id: string;
   type: string;
   query: string;
-  results?: any;
+  created_at?: any;
+  results?: {
+    data?: {
+      status: string;
+      profiles?: Profile[];
+      leaks?: Leak[];
+      pictures?: {
+        picture: string;
+        source: string;
+      }[];
+      existors: Existor[],
+      partial_recovery: any[],
+      passwords: any[],
+      phones: any[]
+    };
+  }[];
 }
 
 export const searchTypes: string[] = [
@@ -38,24 +58,6 @@ export interface NavItem {
   description?: string;
 }
 
-export interface IdentifierDetails {
-  id: string;
-  query: string;
-  type: string;
-  created_at: string;
-  results?: {
-    data?: {
-      status: string;
-      profiles?: Profile[];
-      leaks?: Leak[];
-      pictures?: {
-        picture: string;
-        source: string;
-      }[];
-    };
-  }[];
-}
-
 export interface Profile {
   source: string;
   email: string;
@@ -74,7 +76,7 @@ export interface Leak {
 
 export interface CaseDetails {
   name: string;
-  identifiers?: IdentifierDetails[];
+  identifiers?: Identifier[];
 }
 
 export interface MergedData {
@@ -87,6 +89,7 @@ export type StatsData = {
   usernames: number;
   totalAccounts: number;
   countries: number;
+  existors: number;
 };
 
 export const identifierImages: Record<string, string> = {

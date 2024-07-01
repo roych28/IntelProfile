@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { useTheme } from 'next-themes';
-// import ThemeToggle from '@/components/layout/ThemeToggle/theme-toggle';
 import { cn } from '@/lib/utils';
 import { MobileSidebar } from './mobile-sidebar';
 import { UserNav } from './user-nav';
@@ -14,11 +13,11 @@ export default function Header() {
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {
-      setTheme('dark');
+    setTheme('dark');
   }, [theme, setTheme]);
 
   return (
-    <div className="supports-backdrop-blur:bg-background/60 fixed left-0 bg-background right-0 top-0 z-20 border-b border-gray-700 backdrop-blur">
+    <div className="supports-backdrop-blur:bg-background/60 fixed left-0 bg-[#1A1D30] right-0 top-0 z-20 border-b border-gray-700 backdrop-blur">
       <nav className="flex h-14 items-center justify-between px-4">
         <div className="hidden lg:block">
           <Link href={authUrl} target="_blank">
@@ -42,7 +41,6 @@ export default function Header() {
 
         <div className="flex items-center gap-2">
           <UserNav />
-         
         </div>
       </nav>
     </div>
