@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import Timeline from '@/components/ui/timeline';
 import { Button } from '@/components/ui/button'
-import { MagnifyingGlassIcon, PersonIcon, GroupIcon, GlobeIcon, DownloadIcon, CheckIcon } from '@radix-ui/react-icons';
+import { MagnifyingGlassIcon, PersonIcon, GroupIcon, GlobeIcon, DownloadIcon, CheckIcon, AvatarIcon } from '@radix-ui/react-icons';
 import dayjs from 'dayjs';
 import { Leak, Identifier, Profile, StatsData, identifierImages, Existor } from '@/types';
 import { iconMap } from '@/constants/data';
@@ -65,7 +65,7 @@ export const renderStatsCards = (data: StatsData | null): JSX.Element => (
       </CardContent>
     </Card>
     <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
-      <GroupIcon className="text-lg mr-2" />
+      <AvatarIcon className="text-lg mr-2" />
       <CardContent className="text-sm p-2 pt-0">
         <p className="truncate">Usernames</p>
         <p className="font-bold">{data?.usernames}</p>
