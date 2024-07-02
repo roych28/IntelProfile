@@ -9,6 +9,44 @@ export type User = {
   verified: boolean;
   status: string;
 };
+
+export const iconMap: { [key: string]: string } = {
+  apple: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+  goodreads: "https://s.gr-assets.com/assets/nophoto/user/u_225x300-c928cbb998d4ac6dd1f0f66f31f74b81.png",
+  facebook: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
+  github: "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg",
+  dropbox: "https://upload.wikimedia.org/wikipedia/commons/0/03/Dropbox_Logo_01.png",
+  linkedin: "https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png",
+  twitter: "https://upload.wikimedia.org/wikipedia/en/6/60/Twitter_Logo_as_of_2021.svg",
+  instagram: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png",
+  tiktok: "https://upload.wikimedia.org/wikipedia/commons/a/a9/TikTok_logo.svg",
+  snapchat: "https://upload.wikimedia.org/wikipedia/commons/9/98/Snapchat_Logo.png",
+  microsoft: "https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg",
+  google: "https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg",
+  netflix: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg",
+  trello: "https://cdn.worldvectorlogo.com/logos/trello.svg",
+  spotify: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg",
+  pinterest: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Pinterest_Logo.png",
+  reddit: "https://upload.wikimedia.org/wikipedia/en/8/82/Reddit_logo_and_wordmark.svg",
+  steam: "https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg",
+  whatsapp: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg",
+  youtube: "https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png",
+  twitch: "https://upload.wikimedia.org/wikipedia/commons/2/26/Twitch_logo.svg",
+  discord: "https://upload.wikimedia.org/wikipedia/commons/6/6b/Font_Awesome_5_brands_discord_color.svg",
+  slack: "https://upload.wikimedia.org/wikipedia/commons/7/76/Slack_Icon.png",
+  medium: "https://cdn.worldvectorlogo.com/logos/medium-1.svg",
+  telegram: "https://upload.wikimedia.org/wikipedia/commons/8/83/Telegram_2019_Logo.svg",
+  ebay: "https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.svg",
+  amazon: "https://upload.wikimedia.org/wikipedia/commons/6/62/Amazon.com-Logo.svg",
+  paypal: "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg",
+  airbnb: "https://upload.wikimedia.org/wikipedia/commons/6/69/Airbnb_Logo_B%C3%A9lo.svg",
+  uber: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Uber_logo_2018.svg",
+  lyft: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Lyft_logo13.svg",
+  grubhub: "https://upload.wikimedia.org/wikipedia/commons/4/4f/Grubhub_logo.svg",
+  playgames: "https://www.gstatic.com/images/branding/product/1x/play_games_64dp.png",
+  maps: "https://www.gstatic.com/images/branding/product/1x/maps_64dp.png",
+  hibp: "https://haveibeenpwned.com/Content/Images/SocialLogo.png",
+};
 export const users: User[] = [
   {
     id: 1,

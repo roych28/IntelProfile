@@ -1,11 +1,11 @@
 import React from 'react';
-import Image from 'next/image';
-import { MagnifyingGlassIcon, PersonIcon, GroupIcon, GlobeIcon, DownloadIcon, CheckIcon } from '@radix-ui/react-icons';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import Timeline from '@/components/ui/timeline';
 import { Button } from '@/components/ui/button'
+import { MagnifyingGlassIcon, PersonIcon, GroupIcon, GlobeIcon, DownloadIcon, CheckIcon } from '@radix-ui/react-icons';
 import dayjs from 'dayjs';
 import { Leak, Identifier, Profile, StatsData, identifierImages, Existor } from '@/types';
+import { iconMap } from '@/constants/data';
 
 export const renderProfilePictures = (profiles: Profile[]): JSX.Element => {
   return (
@@ -26,12 +26,11 @@ export const renderProfilePictures = (profiles: Profile[]): JSX.Element => {
                 style={index === profiles.length - 1 ? { borderBottom: 'none' } : {}}
               >
                 <div className="flex items-center pl-4">
-                  <Image
+                  <img
                     src={profile.profile_pic}
                     alt={`${profile.source} profile`}
                     className="rounded-full mr-3 icon-size"
-                    width={40}
-                    height={40}
+                    style={{ width: '40px', height: '40px' }}
                   />
                   <span>{profile.source}</span>
                 </div>
@@ -161,12 +160,10 @@ export const renderPartialRecoveryData = (partialRecovery: any[] | undefined): J
               className={`flex flex-row justify-between items-center mb-3 ${index !== partialRecovery.length - 1 ? 'item-divider border-b border-gray-700' : ''}`}
             >
               <div className="flex items-center pl-4">
-                <Image
+                <img
                   src={identifierImages[item.type]}
                   alt={`${item.type} icon`}
                   className="rounded-full mr-3 icon-size"
-                  width={40}
-                  height={40}
                 />
               </div>
               <div className="flex flex-col items-end flex-1 pr-4">
@@ -242,12 +239,6 @@ export const renderPhones = (phones: any[]): JSX.Element => {
 };
 
 export const renderExistors = (existors: Existor[]): JSX.Element => {
-  const iconMap: { [key: string]: string } = {
-    apple: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
-    goodreads: "https://s.gr-assets.com/assets/nophoto/user/u_225x300-c928cbb998d4ac6dd1f0f66f31f74b81.png",
-    facebook: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
-  };
-
   const filteredExistors = existors.filter(existor => existor.exists);
 
   return (
@@ -266,12 +257,11 @@ export const renderExistors = (existors: Existor[]): JSX.Element => {
             >
               <div className="flex flex-row pl-4">
                 {iconMap[existor.source] && (
-                  <Image
+                  <img
                     src={iconMap[existor.source]}
                     alt={`${existor.source} icon`}
                     className="mr-4"
-                    width={20}
-                    height={20}
+                    style={{ width: '20px', height: '20px' }}
                   />
                 )}
                 <span className="mr-4">{existor.source}</span>
