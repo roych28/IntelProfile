@@ -154,7 +154,10 @@ export const renderPartialRecoveryData = (partialRecovery: any[] | undefined): J
       <CardContent>
         <ul>
           {partialRecovery?.map((item, index) => (
-            <li key={index} className="flex flex-row justify-between items-center mb-3 item-divider">
+            <li
+              key={index}
+              className={`flex flex-row justify-between items-center mb-3 ${index !== partialRecovery.length - 1 ? 'item-divider border-b border-gray-700' : ''}`}
+            >
               <div className="flex items-center pl-4">
                 <img
                   src={identifierImages[item.type]}
@@ -241,6 +244,8 @@ export const renderExistors = (existors: Existor[]): JSX.Element => {
     facebook: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
   };
 
+  const filteredExistors = existors.filter(existor => existor.exists);
+
   return (
     <Card className="custom-card">
       <CardHeader className="card-header pb-2">
@@ -250,11 +255,10 @@ export const renderExistors = (existors: Existor[]): JSX.Element => {
       <hr className="title-underline" />
       <CardContent>
         <ul className="list-unstyled">
-          {existors.filter(existor => existor.exists).map((existor, index) => (
+          {filteredExistors.map((existor, index) => (
             <li
               key={index}
-              className="flex flex-row justify-between items-center mb-3 item-divider"
-              style={index === existors.length - 1 ? { borderBottom: 'none' } : {}}
+              className={`flex flex-row justify-between items-center mb-3 ${index !== filteredExistors.length - 1 ? 'item-divider border-b border-gray-700' : ''}`}
             >
               <div className="flex flex-row pl-4">
                 {iconMap[existor.source] && (
@@ -277,6 +281,7 @@ export const renderExistors = (existors: Existor[]): JSX.Element => {
     </Card>
   );
 };
+
 
 
 
