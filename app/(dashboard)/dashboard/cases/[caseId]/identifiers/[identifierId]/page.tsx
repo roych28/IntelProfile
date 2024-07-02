@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { useCases } from '@/app/lib/data-provider';
 import Breadcrumbs from '@/components/breadcrumbs';
 import { CaseDetails, Identifier, StatsData, Existor, Profile } from '@/types';
-import { mergeDataBySource } from '@/app/lib/utils';
+// import { mergeDataBySource } from '@/app/lib/utils';
 import { renderStatsCards, renderLeaks, renderTimeline, renderSummary, renderProfilePictures, renderPartialRecoveryData, renderExistors, renderPhones, renderPasswords } from '@/components/results-helper-utils';
 
 import dynamic from 'next/dynamic';
@@ -40,8 +40,8 @@ const IdentifierPage: React.FC = () => {
     }
   }, [caseDetails, identifierId]);
 
-  const mergedSources = mergeDataBySource(identifierDetails?.results?.[0]?.data?.profiles || []);
-  const sourcesScanned = Object.keys(mergedSources).length;
+  //const mergedSources = mergeDataBySource(identifierDetails?.results?.[0]?.data?.profiles || []);
+  //const sourcesScanned = Object.keys(mergedSources).length;
 
   const breadcrumbItems = [
     { title: 'Cases', link: '/dashboard/cases' },
@@ -58,7 +58,7 @@ const IdentifierPage: React.FC = () => {
     const sourcesScanned = existorsSet?.size;
   
     return {
-      sourcesScanned: sourcesScanned|| 0,
+      sourcesScanned: sourcesScanned || 0,
       names: namesCount || 0,
       usernames: usernamesCount || 0,
       totalAccounts: totalAccounts || 0,
