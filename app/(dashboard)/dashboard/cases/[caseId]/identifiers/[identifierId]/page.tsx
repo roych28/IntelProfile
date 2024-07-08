@@ -31,8 +31,8 @@ const IdentifierPage: React.FC = () => {
       );
       if (foundIdentifier) {
         setIdentifierDetails(foundIdentifier);
-        if( foundIdentifier?.results?.[0]?.data ){
-          const statsCalculated = calculateStats(foundIdentifier.results[0].data.profiles, foundIdentifier.results[0].data.existors);
+        if( foundIdentifier?.results_json ){
+          const statsCalculated = calculateStats(foundIdentifier.results_json.profiles, foundIdentifier.results_json.existors);
           setStatsData(statsCalculated);
         }
         
@@ -40,7 +40,7 @@ const IdentifierPage: React.FC = () => {
     }
   }, [caseDetails, identifierId]);
 
-  //const mergedSources = mergeDataBySource(identifierDetails?.results?.[0]?.data?.profiles || []);
+  //const mergedSources = mergeDataBySource(identifierDetails?.results_json?.profiles || []);
   //const sourcesScanned = Object.keys(mergedSources).length;
 
   const breadcrumbItems = [
@@ -79,7 +79,7 @@ const IdentifierPage: React.FC = () => {
       <div className="flex-1 max-h-screen overflow-y-auto p-6">
         {identifierDetails ? (
           <>
-            {identifierDetails?.results?.[0]?.data?.leaks && identifierDetails.results[0].data.leaks.length > 0 && (
+            {identifierDetails?.results_json?.leaks && identifierDetails.results_json.leaks.length > 0 && (
               <>
                 <div className="col-span-1">
                   {renderStatsCards(statsData)}
@@ -88,33 +88,33 @@ const IdentifierPage: React.FC = () => {
                   {renderSummary(identifierDetails)}
                 </div>
                 <div className="col-span-1">
-                  {renderTimeline(identifierDetails.results[0].data.leaks)}
+                  {renderTimeline(identifierDetails.results_json.leaks)}
                 </div>
                 <div className="col-span-1 mb-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="">
-                      {renderLeaks(identifierDetails.results[0].data.leaks)}
+                      {renderLeaks(identifierDetails.results_json.leaks)}
                     </div>
                     <div className="">
-                      {identifierDetails.results[0].data.profiles && identifierDetails.results[0].data.profiles.length > 0 && (
+                      {identifierDetails.results_json.profiles && identifierDetails.results_json.profiles.length > 0 && (
                         <div className="grid grid-cols-1 gap-4">
-                          {renderProfilePictures(identifierDetails.results[0].data.profiles)}
+                          {renderProfilePictures(identifierDetails.results_json.profiles)}
                         </div>
                       )}
                     </div>
                   </div>
                 </div>
                 <div className="mb-6">
-                  {renderPartialRecoveryData(identifierDetails.results[0].data.partial_recovery)}
+                  {renderPartialRecoveryData(identifierDetails.results_json.partial_recovery)}
                 </div>
                 <div className="mb-6">
-                  {renderExistors(identifierDetails.results[0].data.existors)}
+                  {renderExistors(identifierDetails.results_json.existors)}
                 </div>
                 <div className="mb-6">
-                  {renderPasswords(identifierDetails.results[0].data.passwords)}
+                  {renderPasswords(identifierDetails.results_json.passwords)}
                 </div>
                 <div className="mb-6">
-                  {renderPhones(identifierDetails.results[0].data.phones)}
+                  {renderPhones(identifierDetails.results_json.phones)}
                 </div>
                 
                 <div className="col-span-1 mb-6">

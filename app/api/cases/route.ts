@@ -9,7 +9,7 @@ export async function GET(req: Request) {
   try {
     const client = await db.connect();
 
-    const result = await client.sql<Case & { identifiers: (Identifier & { results: any[] })[] }[]>`
+    const result = await client.sql<Case & { identifiers: (Identifier & { results_json: string })[] }[]>`
       SELECT
         cases.id,
         cases.name,
@@ -23,25 +23,23 @@ export async function GET(req: Request) {
           'query', identifiers.query,
           'created_at', identifiers.created_at,
           'updated_at', identifiers.updated_at,
-          'results', (
-            SELECT json_agg(json_build_object(
-              'id', identifier_results.id,
-              'identifier_id', identifier_results.identifier_id,
-              'query', identifier_results.query,
-              'type', identifier_results.type,
-              'data', identifier_results.data,
-              'status', identifier_results.status,
-              'created_at', identifier_results.created_at
-            ))
-            FROM identifier_results
-            WHERE identifier_results.identifier_id = identifiers.id
-          )
+          'results_json', identifiers.results_json
         )) AS identifiers
       FROM cases
       LEFT JOIN identifiers ON cases.id = identifiers.case_id
       GROUP BY cases.id
     `;
-    const cases = result.rows;
+    let cases = result.rows;
+
+    // Parse results_json for each identifier
+    cases = cases.map(c => ({
+      ...c,
+      identifiers: c.identifiers.map(i => ({
+        ...i,
+        results_json: JSON.parse(i.results_json)
+      }))
+    }));
+
     await client.release();
 
     return new NextResponse(JSON.stringify(cases), {
@@ -59,6 +57,7 @@ export async function GET(req: Request) {
     });
   }  
 }
+
 
 export async function POST(req: Request) {
   try {

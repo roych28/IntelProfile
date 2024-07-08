@@ -135,8 +135,7 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
             <Button
               disabled={loading}
               variant="destructive"
-              size="sm"
-              className="h-10"
+              type="button"
               onClick={onDelete}
             >
               <Trash className="h-5 w-5" />
@@ -144,8 +143,9 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
           )}
           <Button
             disabled={loading}
-            className="bg-blue-500 hover:bg-blue-600 h-10"
+            className="bg-blue-500 hover:bg-blue-600"
             onClick={form.handleSubmit(onSubmit)}
+            type="button" 
           >
             {action}
           </Button>
