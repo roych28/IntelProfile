@@ -5,6 +5,38 @@ export interface Existor {
   source: string;
 };
 
+export interface Profile {
+  source: string;
+  url: string;
+  email: string;
+  username: string;
+  firstname: string;
+  lastname: string;
+  city: string;
+  profile_pic: string;
+}
+
+export interface Leak {
+  title: string;
+  date: number;
+  url: string;
+}
+
+export interface Picture {
+  picture: string;
+  source: string;
+};
+
+export interface Email {
+  email: string;
+  source?: string;
+};
+
+export interface Phone {
+  number: string;
+  source?: string;
+};
+
 export interface Identifier {
   id: string;
   case_id: string;
@@ -16,14 +48,13 @@ export interface Identifier {
     status: string;
     profiles?: Profile[];
     leaks?: Leak[];
-    pictures?: {
-      picture: string;
-      source: string;
-    }[];
+    pictures?: Picture[];
     existors: Existor[];
     partial_recovery: any[];
     passwords: any[];
-    phones: any[];
+    phones: Phone[];
+    emails: Email[];
+
   }[];
 }
 
@@ -56,22 +87,6 @@ export interface NavItem {
   icon?: keyof typeof Icons;
   label?: string;
   description?: string;
-}
-
-export interface Profile {
-  source: string;
-  email: string;
-  username: string;
-  firstname: string;
-  lastname: string;
-  city: string;
-  profile_pic: string;
-}
-
-export interface Leak {
-  title: string;
-  date: number;
-  url: string;
 }
 
 export interface CaseDetails {

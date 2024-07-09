@@ -1,19 +1,20 @@
-import { db } from '@vercel/postgres';
+import { db, VercelPoolClient } from '@vercel/postgres';
 import dotenv from 'dotenv';
 import { NextResponse } from 'next/server';
 
 dotenv.config();
 
-async function updateIdentifierStatus(client, identifierId, status, resultData) {
+async function updateIdentifierStatus(client: VercelPoolClient, identifierId: string, status: string, resultData: any) {
   const resultsJson = JSON.stringify(resultData);
-  await client.sql`
-    UPDATE identifiers
-    SET status = ${status}, results_json = ${resultsJson}
-    WHERE id = ${identifierId};
-  `;
+  await client.query(
+    `UPDATE identifiers
+     SET status = $1, results_json = $2
+     WHERE id = $3;`,
+    [status, resultsJson, identifierId]
+  );
 }
 
-async function pollStatus(query, type, client, identifierId) {
+async function pollStatus(query: string, type: string, client: VercelPoolClient, identifierId: string) {
   const apiUrl = new URL('https://eye-6adaad69fa3d.profileintel.com/api');
   apiUrl.searchParams.append('query', query);
   apiUrl.searchParams.append('type', type);
@@ -34,7 +35,6 @@ async function pollStatus(query, type, client, identifierId) {
   if (data.status === 'exists') {
     // Update the identifier table with the completed status and data
     await updateIdentifierStatus(client, identifierId, 'exists', data);
-    await client.release();
     return data;
   } else {
     // Wait for 5 seconds before polling again
@@ -46,7 +46,7 @@ async function pollStatus(query, type, client, identifierId) {
 export async function POST(req: Request) {
   try {
     const url = new URL(req.url);
-    const identifierId = url.searchParams.get('identifierId');
+    const identifierId = url.searchParams.get('identifierId') as string;
     const query = url.searchParams.get('query');
     const type = url.searchParams.get('type');
 
@@ -78,11 +78,11 @@ export async function POST(req: Request) {
 
     const resData = await response.json();
 
-    const client = await db.connect();
+    const client: VercelPoolClient = await db.connect();
 
     if (resData.status === 'exists') {
-      await updateIdentifierStatus(client, identifierId, 'exists', resData.data);
-      await client.release();
+      await updateIdentifierStatus(client, identifierId as string, 'exists', resData.data);
+      client.release();
       return new NextResponse(JSON.stringify(resData.data), {
         status: 201,
         headers: {
@@ -91,10 +91,11 @@ export async function POST(req: Request) {
       });
     } else {
       // Insert initial record with pending status
-      await updateIdentifierStatus(client, identifierId, 'pending', "");
+      await updateIdentifierStatus(client, identifierId , 'pending', "");
 
       const finalData = await pollStatus(query, type, client, identifierId);
 
+      client.release();
       return new NextResponse(JSON.stringify(finalData), {
         status: 201,
         headers: {

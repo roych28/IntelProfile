@@ -9,11 +9,13 @@ import { renderStatsCards, renderLeaks, renderTimeline, renderSummary, renderPro
 import dynamic from 'next/dynamic';
 
 const IdentifierPage: React.FC = () => {
-  const { caseId } = useParams();
+  const { caseId } = useParams() as { caseId: string | string[] };
   const searchParams = useSearchParams();
   const { getCaseById } = useCases();
   const [mergedIdentifier, setMergedIdentifier] = useState<Identifier | null>(null);
   const [statsData, setStatsData] = useState<StatsData | null>(null);
+  const [allProfiles, setAllProfiles] = useState<Profile[]>([]);
+  const [allExistors, setAllExistors] = useState<Existor[]>([]);
 
   const LeafletMap = dynamic(() => import('@/components/LeafletMap'), {
     loading: () => <p>A map is loading</p>,
@@ -21,11 +23,12 @@ const IdentifierPage: React.FC = () => {
   });
 
   useEffect(() => {
-    if (caseId) {
+    const caseIdStr = Array.isArray(caseId) ? caseId[0] : caseId;
+    if (caseIdStr) {
       const ids = searchParams.get('ids') || '';
       const idsArray = ids.split(',');
 
-      const caseDetails: CaseDetails | undefined = getCaseById(caseId);
+      const caseDetails: CaseDetails | undefined = getCaseById(caseIdStr);
       if (caseDetails) {
         const foundIdentifiers = caseDetails.identifiers?.filter(
           (identifier: Identifier) => idsArray.includes(identifier.id)
@@ -35,9 +38,24 @@ const IdentifierPage: React.FC = () => {
         setMergedIdentifier(mergedData);
 
         // Aggregate stats for the merged identifier
-        const allProfiles = mergedData.results_json?.profiles || [];
-        const allExistors = mergedData.results_json?.existors || [];
-        const aggregatedStats = calculateStats(allProfiles, allExistors);
+        const profiles: Profile[] = [];
+        const existors: Existor[] = [];
+        
+        if (mergedData.results_json) {
+          mergedData.results_json.forEach(result => {
+            if (result.profiles) {
+              profiles.push(...result.profiles);
+            }
+            if (result.existors) {
+              existors.push(...result.existors);
+            }
+          });
+        }
+
+        setAllProfiles(profiles);
+        setAllExistors(existors);
+
+        const aggregatedStats = calculateStats(profiles, existors);
         setStatsData(aggregatedStats);
       }
     }
@@ -45,40 +63,20 @@ const IdentifierPage: React.FC = () => {
 
   const breadcrumbItems = [
     { title: 'Cases', link: '/dashboard/cases' },
-    { title: `${caseId}`, link: `/dashboard/cases/${caseId}` },
-    { title: `Identifiers details`, link: `/dashboard/cases/${caseId}/identifiers?ids=${searchParams.get('ids')}` },
+    { title: `${Array.isArray(caseId) ? caseId[0] : caseId}`, link: `/dashboard/cases/${Array.isArray(caseId) ? caseId[0] : caseId}` },
+    { title: `Identifiers details`, link: `/dashboard/cases/${Array.isArray(caseId) ? caseId[0] : caseId}/identifiers?ids=${searchParams.get('ids')}` },
   ];
 
   const mergeIdentifiers = (identifiers: Identifier[]): Identifier => {
     const merged: Identifier = {
       id: identifiers.map(identifier => identifier.id).join(', '),
+      case_id: identifiers[0].case_id, // Assuming all identifiers have the same case_id
+      query: identifiers.map(identifier => identifier.query).join(', '),
       type: identifiers.map(identifier => identifier.type).join(', '),
       status: identifiers.map(identifier => identifier.status).join(', '),
       created_at: identifiers.map(identifier => identifier.created_at).join(', '),
-      results_json: {
-        profiles: [],
-        leaks: [],
-        existors: [],
-        partial_recovery: [],
-        passwords: [],
-        phones: [],
-        emails: [], // Add emails array
-        pictures: [], // Add pictures array
-      },
+      results_json: identifiers.flatMap(identifier => identifier.results_json || []),
     };
-
-    identifiers.forEach(identifier => {
-      if (identifier.results_json) {
-        merged.results_json.profiles.push(...(identifier.results_json.profiles || []));
-        merged.results_json.leaks.push(...(identifier.results_json.leaks || []));
-        merged.results_json.existors.push(...(identifier.results_json.existors || []));
-        merged.results_json.partial_recovery.push(...(identifier.results_json.partial_recovery || []));
-        merged.results_json.passwords.push(...(identifier.results_json.passwords || []));
-        merged.results_json.phones.push(...(identifier.results_json.phones || []));
-        merged.results_json.emails.push(...(identifier.results_json.emails || [])); // Merge emails
-        merged.results_json.pictures.push(...(identifier.results_json.pictures || [])); // Merge pictures
-      }
-    });
 
     return merged;
   };
@@ -127,28 +125,28 @@ const IdentifierPage: React.FC = () => {
                         {renderLeaks(mergedIdentifier.results_json.leaks)}
                       </div>
                     )*/}
-                    {mergedIdentifier.results_json?.profiles && (
+                    {allProfiles.length > 0 && (
                       <div className="col-span-1 mb-4">
-                        {renderProfilePictures(mergedIdentifier.results_json.profiles)}
+                        {renderProfilePictures(allProfiles)}
                       </div>
                     )}
                     <div className="col-span-1 mb-4">
-                      {renderPartialRecoveryData(mergedIdentifier.results_json.partial_recovery)}
+                      {renderPartialRecoveryData(mergedIdentifier.results_json?.flatMap(result => result.partial_recovery || []))}
                     </div>
                     <div className="col-span-1 mb-4">
                       {renderExistors(
-                        mergedIdentifier.results_json.existors,
-                        mergedIdentifier.results_json.profiles,
-                        mergedIdentifier.results_json.emails,
-                        mergedIdentifier.results_json.phones,
-                        mergedIdentifier.results_json.pictures
+                        allExistors,
+                        allProfiles,
+                        mergedIdentifier.results_json?.flatMap(result => result?.emails || []),
+                        mergedIdentifier.results_json?.flatMap(result => result?.phones || []),
+                        mergedIdentifier.results_json?.flatMap(result => result?.pictures || [])
                       )}
                     </div>
                     <div className="col-span-1 mb-4">
-                      {renderPasswords(mergedIdentifier.results_json.passwords)}
+                      {renderPasswords(mergedIdentifier.results_json?.flatMap(result => result.passwords || []))}
                     </div>
                     <div className="col-span-1 mb-4">
-                      {renderPhones(mergedIdentifier.results_json.phones)}
+                      {renderPhones(mergedIdentifier.results_json?.flatMap(result => result.phones || []))}
                     </div>
                   </div>
                 </div>

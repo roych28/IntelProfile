@@ -4,7 +4,7 @@ import Timeline from '@/components/ui/timeline';
 import { Button } from '@/components/ui/button'
 import { MagnifyingGlassIcon, PersonIcon, GroupIcon, GlobeIcon, DownloadIcon, AvatarIcon } from '@radix-ui/react-icons';
 import dayjs from 'dayjs';
-import { Leak, Identifier, Profile, StatsData, identifierImages } from '@/types';
+import { Leak, Identifier, Profile, StatsData, identifierImages, Existor, Email, Phone, Picture } from '@/types';
 import { iconMap } from '@/constants/data';
 
 export const renderProfilePictures = (profiles: Profile[]): JSX.Element => {
@@ -139,7 +139,7 @@ export const renderSummary = (details: Identifier): JSX.Element => (
     <CardHeader>
       <p><strong>Query:</strong> {details.query}</p>
       <p><strong>Type:</strong> {details.type}</p>
-      <p><strong>Status:</strong> {details.results_json?.status}</p>
+      <p><strong>Status:</strong> {details?.status}</p>
       <p><strong>Created At:</strong> {new Date(details.created_at).toLocaleString()}</p>
     </CardHeader>
   </Card>
@@ -180,7 +180,7 @@ export const renderPartialRecoveryData = (partialRecovery: any[] | undefined): J
   );
 };
 
-export const renderPasswords = (passwords: any[]): JSX.Element => {
+export const renderPasswords = (passwords: any[] | undefined): JSX.Element => {
   return (
     <Card className="custom-card">
       <CardHeader className="card-header pb-2">
@@ -190,11 +190,11 @@ export const renderPasswords = (passwords: any[]): JSX.Element => {
       <hr className="title-underline" />
       <CardContent>
         <ul className="list-unstyled">
-          {passwords.map((password, index) => (
+          {passwords?.map((password, index) => (
             <li
               key={index}
               className="flex flex-row justify-between items-center mb-3 item-divider"
-              style={index === passwords.length - 1 ? { borderBottom: 'none' } : {}}
+              style={index === passwords?.length - 1 ? { borderBottom: 'none' } : {}}
             >
               <div className="flex flex-row pl-4">
                 <span className="mr-4">{password.domain}</span>
@@ -211,7 +211,7 @@ export const renderPasswords = (passwords: any[]): JSX.Element => {
   );
 };
 
-export const renderPhones = (phones: any[]): JSX.Element => {
+export const renderPhones = (phones: any[] | undefined): JSX.Element => {
   return (
     <Card className="custom-card">
       <CardHeader className="card-header pb-2">
@@ -221,11 +221,11 @@ export const renderPhones = (phones: any[]): JSX.Element => {
       <hr className="title-underline" />
       <CardContent>
         <ul className="list-unstyled">
-          {phones.map((phone, index) => (
+          {phones?.map((phone, index) => (
             <li
               key={index}
               className="flex flex-row justify-between items-center mb-3 item-divider"
-              style={index === phones.length - 1 ? { borderBottom: 'none' } : {}}
+              style={index === phones?.length - 1 ? { borderBottom: 'none' } : {}}
             >
               <div className="flex flex-row pl-4">
                 <span>{phone.number}</span>
@@ -238,8 +238,8 @@ export const renderPhones = (phones: any[]): JSX.Element => {
   );
 };
 
-export const renderExistors = (existors, profiles, emails, phones, pictures) => {
-  const filteredExistors = existors.filter(existor => existor.exists);
+export const renderExistors = (existors: Existor[] | undefined, profiles: Profile[] | undefined, emails: Email[] | undefined, phones: Phone[] | undefined, pictures: Picture[] | undefined) => {
+  const filteredExistors = existors?.filter(existor => existor.exists);
 
   return (
     <Card className="custom-card">
@@ -250,11 +250,11 @@ export const renderExistors = (existors, profiles, emails, phones, pictures) => 
       <hr className="title-underline" />
       <CardContent>
         <ul className="list-unstyled">
-          {filteredExistors.map((existor, index) => {
-            const profile = profiles.find(p => p.source === existor.source) || {};
-            const email = emails.find(e => e.source === existor.source) || {};
-            const phone = phones.find(p => p.source === existor.source) || {};
-            const picture = pictures.find(p => p.source === existor.source) || {};
+          {filteredExistors?.map((existor, index) => {
+            const profile = profiles?.find(p => p.source === existor.source) || null;
+            const email = emails?.find(e => e.source === existor.source) || null;
+            const phone = phones?.find(p => p.source === existor.source) || null;
+            const picture = pictures?.find(p => p.source === existor.source) || null;
 
             return (
               <li
@@ -262,7 +262,7 @@ export const renderExistors = (existors, profiles, emails, phones, pictures) => 
                 className={`flex flex-row justify-between items-center mb-3 ${index !== filteredExistors.length - 1 ? 'item-divider border-b border-gray-700' : ''}`}
               >
                 <div className="flex flex-row pl-4">
-                  {iconMap[existor.source] && (
+                  {existor && iconMap[existor.source] && (
                     <img
                       src={iconMap[existor.source]}
                       alt={`${existor.source} icon`}
@@ -271,23 +271,23 @@ export const renderExistors = (existors, profiles, emails, phones, pictures) => 
                     />
                   )}
                   <div className="flex flex-col">
-                    {profile.url && (
-                      <a href={profile.url} className="text-blue-500 underline">{profile.url}</a>
+                    {profile?.url && (
+                      <a href={profile.url} className="text-blue-500 underline">{profile?.url}</a>
                     )}
-                    <span className="text-gray-500">{`Source: ${existor.source}`}</span>
-                    {email.email && (
+                    <span className="text-gray-500">{`Source: ${existor?.source}`}</span>
+                    {email?.email && (
                       <span className="text-gray-500">{`Email: ${email.email}`}</span>
                     )}
-                    {phone.number && (
-                      <span className="text-gray-500">{`Phone: ${phone.number}`}</span>
+                    {phone?.number && (
+                      <span className="text-gray-500">{`Phone: ${phone?.number}`}</span>
                     )}
-                    {(profile.firstname || profile.lastname) && (
+                    {(profile?.firstname || profile?.lastname) && (
                       <span className="text-gray-500">{`Name: ${profile.firstname || ''} ${profile.lastname || ''}`}</span>
                     )}
                   </div>
                 </div>
                 <div className="flex justify-end pr-4">
-                  {picture.picture && (
+                  {picture?.picture && (
                     <img src={picture.picture} alt="Profile" className="w-10 h-10 rounded-full" />
                   )}
                 </div>

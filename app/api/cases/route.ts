@@ -35,9 +35,9 @@ export async function GET(req: Request) {
     // Parse results_json for each identifier
     cases = cases.map(c => ({
       ...c,
-      identifiers: c.identifiers.map(i => ({
+      identifiers: c.identifiers.map((i: any) => ({
         ...i,
-        results_json: JSON.parse(i.results_json)
+        results_json: i.results_json ? JSON.parse(i.results_json) : null
       }))
     }));
 
@@ -57,8 +57,7 @@ export async function GET(req: Request) {
       },
     });
   }  
-}
-
+};
 
 export async function POST(req: Request) {
   try {
