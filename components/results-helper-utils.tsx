@@ -50,7 +50,9 @@ export const renderProfilePictures = (profiles: Profile[]): JSX.Element => {
 
 export const renderStatsCards = (data: StatsData | null): JSX.Element => {
 
-  if(!data) return null;
+  if(!data) 
+    return <> </>;
+
   return (
     <div className="flex space-x-3 mb-4">
         <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
@@ -93,7 +95,7 @@ export const renderStatsCards = (data: StatsData | null): JSX.Element => {
 };
 
 export const renderLeaks = (leaks: Leak[] | undefined): JSX.Element => {
-  if(leaks?.length === 0) return null;
+  if(leaks?.length === 0) return <></>;
   return (
     <Card className="custom-card">
       <CardHeader className="card-header pb-2">
@@ -103,7 +105,7 @@ export const renderLeaks = (leaks: Leak[] | undefined): JSX.Element => {
       <hr className="title-underline" />
       <CardContent>
         <ul className="list-unstyled">
-          {leaks.map((leak, index) => (
+          {leaks?.map((leak, index) => (
             <li
               key={index}
               className="flex flex-row justify-between items-center mb-3 item-divider"
@@ -126,7 +128,7 @@ export const renderLeaks = (leaks: Leak[] | undefined): JSX.Element => {
 
 export const renderTimeline = (leaks: Leak[]): JSX.Element => {
 
-  if(leaks.length === 0) return null;
+  if(leaks.length === 0) return <></>;
 
   const items = leaks.map((leak, index) => ({
     id: index + 1,
@@ -155,7 +157,7 @@ export const renderSummary = (details: Identifier): JSX.Element => (
 
 export const renderPartialRecoveryData = (partialRecovery: any[] | undefined): JSX.Element => {
 
-  if(partialRecovery.length === 0) return null;
+  if(partialRecovery?.length === 0) return <></>;
   return (
     <Card className="custom-card">
       <CardHeader className="card-header pb-2">
@@ -192,7 +194,7 @@ export const renderPartialRecoveryData = (partialRecovery: any[] | undefined): J
 
 export const renderPasswords = (passwords: any[] | undefined): JSX.Element => {
 
-  if(passwords.length === 0) return null;
+  if(passwords?.length === 0) return <></>;
 
   return (
     <Card className="custom-card">
@@ -226,7 +228,7 @@ export const renderPasswords = (passwords: any[] | undefined): JSX.Element => {
 
 export const renderPhones = (phones: any[] | undefined): JSX.Element => {
 
-  if(phones.length === 0) return null;
+  if(phones?.length === 0) return <></>;
 
   return (
     <Card className="custom-card">
@@ -256,7 +258,7 @@ export const renderPhones = (phones: any[] | undefined): JSX.Element => {
 
 export const renderExistors = (existors: Existor[] | undefined, profiles: Profile[] | undefined, emails: Email[] | undefined, phones: Phone[] | undefined, pictures: Picture[] | undefined) => {
   const filteredExistors = existors?.filter(existor => existor.exists);
-  if( filteredExistors.length === 0 ) return null;
+  if( filteredExistors?.length === 0 ) return <></>;;
 
   return (
     <Card className="custom-card">

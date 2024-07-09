@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useCases } from '@/app/lib/data-provider';
 import Breadcrumbs from '@/components/breadcrumbs';
-import { CaseDetails, Identifier, StatsData, Existor, Profile } from '@/types';
+import { CaseDetails, Identifier, StatsData, Existor, Profile, Leak, Picture, Phone, Email } from '@/types';
 import { renderStatsCards, renderLeaks, renderTimeline, renderSummary, renderProfilePictures, renderPartialRecoveryData, renderExistors, renderPhones, renderPasswords } from '@/components/results-helper-utils';
 import dynamic from 'next/dynamic';
 
@@ -16,6 +16,7 @@ const IdentifierPage: React.FC = () => {
   const [statsData, setStatsData] = useState<StatsData | null>(null);
   const [allProfiles, setAllProfiles] = useState<Profile[]>([]);
   const [allExistors, setAllExistors] = useState<Existor[]>([]);
+  const [allLeaks, setAllLeaks] = useState<Leak[]>([]);
 
   const LeafletMap = dynamic(() => import('@/components/LeafletMap'), {
     loading: () => <p>A map is loading</p>,
@@ -40,7 +41,8 @@ const IdentifierPage: React.FC = () => {
         // Aggregate stats for the merged identifier
         const profiles: Profile[] = [];
         const existors: Existor[] = [];
-        
+        const leaks: Leak[] = [];
+
         if (mergedData.results_json) {
           mergedData.results_json.forEach(result => {
             if (result.profiles) {
@@ -49,11 +51,15 @@ const IdentifierPage: React.FC = () => {
             if (result.existors) {
               existors.push(...result.existors);
             }
+            if (result.leaks) {
+              leaks.push(...result.leaks);
+            }
           });
         }
 
         setAllProfiles(profiles);
         setAllExistors(existors);
+        setAllLeaks(leaks);
 
         const aggregatedStats = calculateStats(profiles, existors);
         setStatsData(aggregatedStats);
@@ -143,17 +149,16 @@ const IdentifierPage: React.FC = () => {
                       {mergedIdentifier.results_json && renderPhones(mergedIdentifier.results_json?.flatMap(result => result.phones || []))}
                     </div>
                   </div>
-                  {mergedIdentifier.results_json?.leaks?.length > 0 && (
-                      <div className="col-span-1 mb-4">
-                        {renderTimeline(mergedIdentifier.results_json.leaks)}
-                        {renderLeaks(mergedIdentifier.results_json.leaks)}
-                      </div>
-                    )}
-                    <div className="col-span-1 mb-6">
-                      <LeafletMap />
+                  {allLeaks.length > 0 && (
+                    <div className="col-span-1 mb-4">
+                      {renderTimeline(allLeaks)}
+                      {renderLeaks(allLeaks)}
                     </div>
+                  )}
+                  <div className="col-span-1 mb-6">
+                    <LeafletMap />
+                  </div>
                 </div>
-                
               </>
             )}
           </>
