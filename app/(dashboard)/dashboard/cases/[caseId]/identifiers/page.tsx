@@ -119,22 +119,16 @@ const IdentifierPage: React.FC = () => {
                 <div className="col-span-1">
                   <div key={mergedIdentifier.id}>
                     {renderSummary(mergedIdentifier)}
-                    {/*mergedIdentifier.results_json?.leaks && (
-                      <div className="col-span-1 mb-4">
-                        {renderTimeline(mergedIdentifier.results_json.leaks)}
-                        {renderLeaks(mergedIdentifier.results_json.leaks)}
-                      </div>
-                    )*/}
                     {allProfiles.length > 0 && (
                       <div className="col-span-1 mb-4">
-                        {renderProfilePictures(allProfiles)}
+                        {mergedIdentifier.results_json && renderProfilePictures(allProfiles)}
                       </div>
                     )}
                     <div className="col-span-1 mb-4">
-                      {renderPartialRecoveryData(mergedIdentifier.results_json?.flatMap(result => result.partial_recovery || []))}
+                      {mergedIdentifier.results_json && renderPartialRecoveryData(mergedIdentifier.results_json?.flatMap(result => result.partial_recovery || []))}
                     </div>
                     <div className="col-span-1 mb-4">
-                      {renderExistors(
+                      {mergedIdentifier.results_json && renderExistors(
                         allExistors,
                         allProfiles,
                         mergedIdentifier.results_json?.flatMap(result => result?.emails || []),
@@ -143,16 +137,23 @@ const IdentifierPage: React.FC = () => {
                       )}
                     </div>
                     <div className="col-span-1 mb-4">
-                      {renderPasswords(mergedIdentifier.results_json?.flatMap(result => result.passwords || []))}
+                      {mergedIdentifier.results_json && renderPasswords(mergedIdentifier.results_json?.flatMap(result => result.passwords || []))}
                     </div>
                     <div className="col-span-1 mb-4">
-                      {renderPhones(mergedIdentifier.results_json?.flatMap(result => result.phones || []))}
+                      {mergedIdentifier.results_json && renderPhones(mergedIdentifier.results_json?.flatMap(result => result.phones || []))}
                     </div>
                   </div>
+                  {mergedIdentifier.results_json?.leaks?.length > 0 && (
+                      <div className="col-span-1 mb-4">
+                        {renderTimeline(mergedIdentifier.results_json.leaks)}
+                        {renderLeaks(mergedIdentifier.results_json.leaks)}
+                      </div>
+                    )}
+                    <div className="col-span-1 mb-6">
+                      <LeafletMap />
+                    </div>
                 </div>
-                <div className="col-span-1 mb-6">
-                  <LeafletMap />
-                </div>
+                
               </>
             )}
           </>

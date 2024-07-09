@@ -48,47 +48,52 @@ export const renderProfilePictures = (profiles: Profile[]): JSX.Element => {
   );
 };
 
-export const renderStatsCards = (data: StatsData | null): JSX.Element => (
-  <div className="flex space-x-3 mb-4">
-    <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
-      <MagnifyingGlassIcon className="text-lg mr-2" />
-      <CardContent className="text-sm p-2 pt-0">
-        <p className="truncate">Sources Scanned</p>
-        <p className="font-bold">{data?.sourcesScanned}</p>
-      </CardContent>
-    </Card>
-    <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
-      <PersonIcon className="text-lg mr-2" />
-      <CardContent className="text-sm p-2 pt-0">
-        <p className="truncate">Names</p>
-        <p className="font-bold">{data?.names}</p>
-      </CardContent>
-    </Card>
-    <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
-      <AvatarIcon className="text-lg mr-2" />
-      <CardContent className="text-sm p-2 pt-0">
-        <p className="truncate">Usernames</p>
-        <p className="font-bold">{data?.usernames}</p>
-      </CardContent>
-    </Card>
-    <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
-      <GroupIcon className="text-lg mr-2" />
-      <CardContent className="text-sm p-2 pt-0">
-        <p className="truncate">Total Accounts</p>
-        <p className="font-bold">{data?.totalAccounts}</p>
-      </CardContent>
-    </Card>
-    <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
-      <GlobeIcon className="text-lg mr-2" />
-      <CardContent className="text-sm p-2 pt-0">
-        <p className="truncate">Countries</p>
-        <p className="font-bold">{data?.countries}</p>
-      </CardContent>
-    </Card>
-  </div>
-);
+export const renderStatsCards = (data: StatsData | null): JSX.Element => {
 
-export const renderLeaks = (leaks: Leak[]): JSX.Element => {
+  if(!data) return null;
+  return (
+    <div className="flex space-x-3 mb-4">
+        <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
+          <MagnifyingGlassIcon className="text-lg mr-2" />
+          <CardContent className="text-sm p-2 pt-0">
+            <p className="truncate">Sources Scanned</p>
+            <p className="font-bold">{data?.sourcesScanned}</p>
+          </CardContent>
+        </Card>
+        <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
+          <PersonIcon className="text-lg mr-2" />
+          <CardContent className="text-sm p-2 pt-0">
+            <p className="truncate">Names</p>
+            <p className="font-bold">{data?.names}</p>
+          </CardContent>
+        </Card>
+        <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
+          <AvatarIcon className="text-lg mr-2" />
+          <CardContent className="text-sm p-2 pt-0">
+            <p className="truncate">Usernames</p>
+            <p className="font-bold">{data?.usernames}</p>
+          </CardContent>
+        </Card>
+        <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
+          <GroupIcon className="text-lg mr-2" />
+          <CardContent className="text-sm p-2 pt-0">
+            <p className="truncate">Total Accounts</p>
+            <p className="font-bold">{data?.totalAccounts}</p>
+          </CardContent>
+        </Card>
+        <Card className="flex-1 pt-2 pl-2 flex items-center h-14 custom-card">
+          <GlobeIcon className="text-lg mr-2" />
+          <CardContent className="text-sm p-2 pt-0">
+            <p className="truncate">Countries</p>
+            <p className="font-bold">{data?.countries}</p>
+          </CardContent>
+        </Card>
+      </div>
+  );
+};
+
+export const renderLeaks = (leaks: Leak[] | undefined): JSX.Element => {
+  if(leaks?.length === 0) return null;
   return (
     <Card className="custom-card">
       <CardHeader className="card-header pb-2">
@@ -120,6 +125,9 @@ export const renderLeaks = (leaks: Leak[]): JSX.Element => {
 };
 
 export const renderTimeline = (leaks: Leak[]): JSX.Element => {
+
+  if(leaks.length === 0) return null;
+
   const items = leaks.map((leak, index) => ({
     id: index + 1,
     content: leak.title,
@@ -146,6 +154,8 @@ export const renderSummary = (details: Identifier): JSX.Element => (
 );
 
 export const renderPartialRecoveryData = (partialRecovery: any[] | undefined): JSX.Element => {
+
+  if(partialRecovery.length === 0) return null;
   return (
     <Card className="custom-card">
       <CardHeader className="card-header pb-2">
@@ -181,6 +191,9 @@ export const renderPartialRecoveryData = (partialRecovery: any[] | undefined): J
 };
 
 export const renderPasswords = (passwords: any[] | undefined): JSX.Element => {
+
+  if(passwords.length === 0) return null;
+
   return (
     <Card className="custom-card">
       <CardHeader className="card-header pb-2">
@@ -212,6 +225,9 @@ export const renderPasswords = (passwords: any[] | undefined): JSX.Element => {
 };
 
 export const renderPhones = (phones: any[] | undefined): JSX.Element => {
+
+  if(phones.length === 0) return null;
+
   return (
     <Card className="custom-card">
       <CardHeader className="card-header pb-2">
@@ -240,6 +256,7 @@ export const renderPhones = (phones: any[] | undefined): JSX.Element => {
 
 export const renderExistors = (existors: Existor[] | undefined, profiles: Profile[] | undefined, emails: Email[] | undefined, phones: Phone[] | undefined, pictures: Picture[] | undefined) => {
   const filteredExistors = existors?.filter(existor => existor.exists);
+  if( filteredExistors.length === 0 ) return null;
 
   return (
     <Card className="custom-card">
