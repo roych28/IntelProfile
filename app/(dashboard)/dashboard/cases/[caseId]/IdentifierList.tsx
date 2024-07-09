@@ -17,12 +17,13 @@ import { Identifier, identifierImages } from '@/types';
 interface IdentifierListProps {
   identifiers: Identifier[];
   onIdentifierChange: (id: string, field: string, value: string | null) => void;
-  onDetailsClick: (identifierId: string) => void;
+  onDetailsClick: (identifierIds: string[]) => void; // Update this prop to accept multiple IDs
 }
 
 const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifierChange, onDetailsClick }) => {
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
   const [error, setError] = useState('');
+  const [selectedIds, setSelectedIds] = useState<string[]>([]); // State for multiple selected identifiers
 
   const handleSearch = async (id: string) => {
     const identifier = identifiers.find(identifier => identifier.id === id);
@@ -61,13 +62,39 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
     }
   };
 
+  const handleSelect = (id: string) => {
+    setSelectedIds(prevSelectedIds =>
+      prevSelectedIds.includes(id)
+        ? prevSelectedIds.filter(selectedId => selectedId !== id)
+        : [...prevSelectedIds, id]
+    );
+  };
+
+  const handleExplore = () => {
+    onDetailsClick(selectedIds);
+  };
+
   return (
     <div className="h-screen flex flex-col">
-      <h2 className="text-lg font-semibold">Identifiers</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-lg font-semibold">Identifiers</h2>
+        <Button
+          className={`bg-green-500 hover:bg-green-600 ${selectedIds.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+          onClick={handleExplore}
+          type="button"
+          disabled={selectedIds.length === 0}
+        >
+          Explore Identifier
+        </Button>
+      </div>
       <div className="flex-1 max-h-100 overflow-y-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {identifiers.map((identifier: Identifier) => (
-            <div key={identifier.id} className="p-4 border border-gray-700 bg-gray-800 rounded-lg">
+            <div
+              key={identifier.id}
+              className={`p-4 border ${selectedIds.includes(identifier.id) ? 'border-blue-500' : 'border-gray-700'} bg-gray-800 rounded-lg cursor-pointer`}
+              onClick={() => handleSelect(identifier.id)}
+            >
               <div className="flex items-center mb-2">
                 <Image
                   src={identifierImages[identifier.type as keyof typeof identifierImages]}
@@ -76,7 +103,7 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
                   height={100}
                   className="object-cover rounded-lg"
                 />
-                {identifier.results && (
+                {identifier.results_json && (
                   <CheckCircle className="text-green-500 w-6 h-6 ml-2" />
                 )}
               </div>
@@ -112,13 +139,6 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
                   disabled={loadingIds.includes(identifier.id)}
                 >
                   {loadingIds.includes(identifier.id) ? 'Searching...' : 'Search'}
-                </Button>
-                <Button
-                  className="bg-green-500 hover:bg-green-600"
-                  onClick={() => onDetailsClick(identifier.id)}
-                  type="button"
-                >
-                  Details
                 </Button>
               </div>
             </div>

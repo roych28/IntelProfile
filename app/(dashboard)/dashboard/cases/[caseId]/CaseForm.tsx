@@ -122,8 +122,9 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
     form.setValue('identifiers', updatedIdentifiers);
   };
 
-  const goToDetails = (identifierId: string) => {
-    router.push(`/dashboard/cases/${caseId}/identifiers/${identifierId}`);
+  const goToDetails = (identifierIds: string[]) => {
+    const idsString = identifierIds.join(',');
+    router.push(`/dashboard/cases/${caseId}/identifiers?ids=${idsString}`);
   };
 
   return (

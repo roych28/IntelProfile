@@ -11,22 +11,22 @@ export interface Identifier {
   type: string;
   query: string;
   created_at?: any;
-  results?: {
-    data?: {
-      status: string;
-      profiles?: Profile[];
-      leaks?: Leak[];
-      pictures?: {
-        picture: string;
-        source: string;
-      }[];
-      existors: Existor[],
-      partial_recovery: any[],
-      passwords: any[],
-      phones: any[]
-    };
+  status?: string;
+  results_json?: {
+    status: string;
+    profiles?: Profile[];
+    leaks?: Leak[];
+    pictures?: {
+      picture: string;
+      source: string;
+    }[];
+    existors: Existor[];
+    partial_recovery: any[];
+    passwords: any[];
+    phones: any[];
   }[];
 }
+
 
 export const searchTypes: string[] = [
   'Email',

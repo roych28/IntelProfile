@@ -23,6 +23,7 @@ export async function GET(req: Request) {
           'query', identifiers.query,
           'created_at', identifiers.created_at,
           'updated_at', identifiers.updated_at,
+          'status', identifiers.status,
           'results_json', identifiers.results_json
         )) AS identifiers
       FROM cases

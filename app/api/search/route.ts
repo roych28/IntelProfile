@@ -1,4 +1,3 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { db } from '@vercel/postgres';
 import dotenv from 'dotenv';
 import { NextResponse } from 'next/server';
@@ -44,9 +43,9 @@ async function pollStatus(query, type, client, identifierId) {
   }
 }
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req: Request) {
   try {
-    const url = new URL(req.url, `http://${req.headers.host}`);
+    const url = new URL(req.url);
     const identifierId = url.searchParams.get('identifierId');
     const query = url.searchParams.get('query');
     const type = url.searchParams.get('type');
@@ -112,4 +111,4 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
       }
     });
   }
-}
+};
