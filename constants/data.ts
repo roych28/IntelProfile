@@ -46,7 +46,12 @@ export const iconMap: { [key: string]: string } = {
   playgames: "https://www.gstatic.com/images/branding/product/1x/play_games_64dp.png",
   maps: "https://www.gstatic.com/images/branding/product/1x/maps_64dp.png",
   hibp: "https://haveibeenpwned.com/Content/Images/SocialLogo.png",
+  skype: "https://upload.wikimedia.org/wikipedia/commons/e/ee/Skype_logo_(2019%E2%80%93present).svg",
+  zoom: "https://upload.wikimedia.org/wikipedia/commons/7/72/Zoom_Communications_Logo.svg",
+  outlook: "https://upload.wikimedia.org/wikipedia/commons/1/1d/Outlook.com_icon.svg",
+  yahoo: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Yahoo%21_logo.svg",
 };
+
 export const users: User[] = [
   {
     id: 1,

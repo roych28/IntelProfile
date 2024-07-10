@@ -19,11 +19,11 @@ const CasePage = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="max-h-screen">
       <PageHeader breadcrumbItems={breadcrumbItems} />
-      <main className="container mx-auto py-8 px-6">
+      <div className="mx-auto py-8 px-6">
         {loading ? (
-          <div className="flex justify-center items-center h-full">
+          <div className="flex justify-center items-center">
             <span>Loading...</span>
           </div>
         ) : (
@@ -33,7 +33,7 @@ const CasePage = () => {
             <CaseForm />
           )
         )}
-      </main>
+      </div>
     </div>
   );
 };

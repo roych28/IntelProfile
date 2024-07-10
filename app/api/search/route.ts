@@ -5,13 +5,18 @@ import { NextResponse } from 'next/server';
 dotenv.config();
 
 async function updateIdentifierStatus(client: VercelPoolClient, identifierId: string, status: string, resultData: any) {
-  const resultsJson = JSON.stringify(resultData);
-  await client.query(
-    `UPDATE identifiers
-     SET status = $1, results_json = $2
-     WHERE id = $3;`,
-    [status, resultsJson, identifierId]
-  );
+  const resultsJson = resultData ? JSON.stringify(resultData) : null;
+  try{
+    await client.query(
+      `UPDATE identifiers
+       SET status = $1, results_json = $2
+       WHERE id = $3;`,
+      [status, resultsJson, identifierId]
+    );
+  } catch (error) {
+    console.error('Error updating identifier status:', error);
+  }
+  
 }
 
 async function pollStatus(query: string, type: string, client: VercelPoolClient, identifierId: string) {
@@ -32,14 +37,17 @@ async function pollStatus(query: string, type: string, client: VercelPoolClient,
 
   const data = await response.json();
 
-  if (data.status === 'exists') {
+  if (data.status === 'exists' || data.status === 'success') {
     // Update the identifier table with the completed status and data
     await updateIdentifierStatus(client, identifierId, 'exists', data);
     return data;
-  } else {
-    // Wait for 5 seconds before polling again
-    await new Promise(resolve => setTimeout(resolve, 5000));
+  } else if (data.status === 'in_progress') {
+    console.log('Identifier is still in progress');
+    await new Promise(resolve => setTimeout(resolve, 3000));
     return pollStatus(query, type, client, identifierId);
+  } else {
+    //failed
+    throw new Error(`Failed GET pro API Error: ${response.statusText}`);
   }
 }
 
@@ -73,7 +81,7 @@ export async function POST(req: Request) {
     });
 
     if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
+      throw new Error(`Error: fetch identifier results failed with message ${response.statusText}`);
     }
 
     const resData = await response.json();
@@ -89,19 +97,21 @@ export async function POST(req: Request) {
           'Content-Type': 'application/json',
         }
       });
-    } else {
-      // Insert initial record with pending status
-      await updateIdentifierStatus(client, identifierId , 'pending', "");
+    } else if(resData.status === 'success') {
+      //case status success
+      await updateIdentifierStatus(client, identifierId , 'pending', null);
 
       const finalData = await pollStatus(query, type, client, identifierId);
-
-      client.release();
+      await updateIdentifierStatus(client, identifierId as string, 'exists', finalData.data);
       return new NextResponse(JSON.stringify(finalData), {
         status: 201,
         headers: {
           'Content-Type': 'application/json',
         }
       });
+    } else {
+      //case failed
+      throw new Error(`Error: fetch identifier results failed with message ${resData.message}`);
     }
   } catch (error) {
     // Return an error response

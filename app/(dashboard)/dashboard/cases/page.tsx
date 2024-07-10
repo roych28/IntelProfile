@@ -24,7 +24,7 @@ const CasesPage: React.FC = () => {
         breadcrumbItems={breadcrumbItems}
         button={{ link: '/dashboard/cases/new', text: 'New Case' }}
       />
-      <main className="container mx-auto py-8 px-6">
+      <div className="container mx-auto py-8 px-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {cases.map((caseItem) => (
             <div
@@ -47,7 +47,7 @@ const CasesPage: React.FC = () => {
             </div>
           ))}
         </div>
-      </main>
+      </div>
     </div>
   );
 };

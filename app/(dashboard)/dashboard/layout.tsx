@@ -16,12 +16,11 @@ export default function DashboardLayout({
   return (
     <>
       <Header />
-      <div className="flex h-screen overflow-hidden">
+      <div className="flex">
         <Sidebar />
         <DataProvider> 
-          <main className="flex-1 overflow-hidden pt-14">{children}</main>
-        </DataProvider>
-       
+          <main className="flex-1 pt-14 overflow-hidden">{children}</main>
+        </DataProvider> 
       </div>
     </>
   );

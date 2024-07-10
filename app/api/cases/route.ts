@@ -95,13 +95,13 @@ export async function POST(req: Request) {
 
     if (Array.isArray(identifiers)) {
       for (const identifier of identifiers) {
-        const { id: identifierId, type, query } = identifier;
+        const { id: identifierId, type, query, results_json } = identifier;
     
         if (identifierId) {
           // Update the existing identifier
           await client.sql`
             UPDATE identifiers
-            SET type = ${type}, query = ${query}
+            SET type = ${type}, query = ${query}, results_json = ${JSON.stringify(results_json)}
             WHERE id = ${identifierId}
           `;
         } else {

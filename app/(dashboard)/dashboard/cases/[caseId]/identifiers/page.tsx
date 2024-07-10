@@ -106,7 +106,7 @@ const IdentifierPage: React.FC = () => {
   };
 
   return (
-    <div className="max-h-[96vh] flex flex-col pb-4">
+    <div className="flex flex-col pb-4">
       <header className="py-4 px-6 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex h-full">

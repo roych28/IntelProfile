@@ -62,7 +62,8 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
     }
   };
 
-  const handleSelect = (id: string) => {
+  const handleSelect = (event: any, id: string) => {
+    if(event.target.tagName === 'BUTTON') return; 
     setSelectedIds(prevSelectedIds =>
       prevSelectedIds.includes(id)
         ? prevSelectedIds.filter(selectedId => selectedId !== id)
@@ -75,8 +76,8 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
   };
 
   return (
-    <div className="h-screen flex flex-col">
-      <div className="flex justify-between items-center">
+    <div className="max-h-screen flex flex-col">
+      <div className="flex justify-between items-center p-2 shadow-md">
         <h2 className="text-lg font-semibold">Identifiers</h2>
         <Button
           className={`bg-green-500 hover:bg-green-600 ${selectedIds.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -87,13 +88,13 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
           Explore Identifier
         </Button>
       </div>
-      <div className="flex-1 max-h-100 overflow-y-auto p-4">
+      <div className="flex-1 p-3 overflow-y-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {identifiers.map((identifier: Identifier) => (
             <div
               key={identifier.id}
               className={`p-4 border ${selectedIds.includes(identifier.id) ? 'border-blue-500' : 'border-gray-700'} bg-gray-800 rounded-lg cursor-pointer`}
-              onClick={() => handleSelect(identifier.id)}
+              onClick={(e) => handleSelect(e, identifier.id)}
             >
               <div className="flex items-center mb-2">
                 <Image
@@ -139,7 +140,7 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
                   disabled={loadingIds.includes(identifier.id)}
                 >
                   {loadingIds.includes(identifier.id) ? 'Searching...' : 'Search'}
-                </Button>
+                </Button> 
               </div>
             </div>
           ))}
