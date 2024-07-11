@@ -114,7 +114,7 @@ export const renderLeaks = (leaks: Leak[] | undefined): JSX.Element => {
             >
               <div className="flex flex-row pl-4">
                 <span className="mr-4">{leak.title}</span>
-                <span className="mr-4">{leak.url || 'unknown url'}</span>
+                <span className="mr-4">{leak.url || ''}</span>
               </div>
               <div className="flex justify-end pr-4">
                 <span>{new Date(leak.date * 1000).toLocaleDateString()}</span>

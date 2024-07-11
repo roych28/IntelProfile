@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/select';
 import { CheckCircle } from 'lucide-react'; // Import the icon
 import { Identifier, identifierImages } from '@/types';
+import { useCases } from '@/app/lib/data-provider';
 
 interface IdentifierListProps {
   identifiers: Identifier[];
@@ -24,6 +25,7 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
   const [error, setError] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]); // State for multiple selected identifiers
+  const { refetchCases } = useCases();
 
   const handleSearch = async (id: string | undefined) => {
     if (!id) return; 
@@ -55,6 +57,8 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
       const data = await response.json();
       onIdentifierChange(id, 'results', data);
       setError('');
+      if(refetchCases) refetchCases();
+      
     } catch (err: any) {
       setError(err.message);
       onIdentifierChange(id, 'results', null);

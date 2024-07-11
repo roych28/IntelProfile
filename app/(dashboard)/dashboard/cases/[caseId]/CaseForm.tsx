@@ -124,9 +124,6 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
         identifier.id === id ? { ...identifier, [field]: value } : identifier
       )
     );
-
-    if(refetchCases)
-      refetchCases();
   };
 
   const addIdentifier = (type: string, query: string) => {

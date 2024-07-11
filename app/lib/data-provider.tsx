@@ -1,12 +1,11 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
 import { Case } from '@/types';
 
 type CasesContextType = {
   cases: Case[];
   getCaseById: (id: string) => Case | undefined;
-  loading: boolean;
   refetchCases: () => Promise<void>;
 };
 
@@ -14,34 +13,42 @@ const CasesContext = createContext<CasesContextType | undefined>(undefined);
 
 export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cases, setCases] = useState<Case[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [initialLoading, setInitialLoading] = useState<boolean>(true); // Only for initial loading
 
   const fetchCases = async () => {
-    setLoading(true);
     try {
       const response = await fetch('/api/cases');
       const data = await response.json();
       setCases(data);
     } catch (error) {
       console.error('Error fetching cases:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchCases();
+    const initialFetch = async () => {
+      await fetchCases();
+      setInitialLoading(false);
+    };
+    initialFetch();
   }, []);
 
   const getCaseById = (id: string) => {
-    console.log('Searching for case with id:', id);
-    const foundCase = cases.find(caseItem => caseItem.id === id);
-    console.log('Found case:', foundCase);
-    return foundCase;
+    return cases.find(caseItem => caseItem.id === id);
   };
-  
+
+  const value = useMemo(() => ({
+    cases,
+    getCaseById,
+    refetchCases: fetchCases,
+  }), [cases]);
+
+  if (initialLoading) {
+    return <div>Loading...</div>; // Show loading state for the initial fetch
+  }
+
   return (
-    <CasesContext.Provider value={{ cases, getCaseById, loading, refetchCases: fetchCases }}>
+    <CasesContext.Provider value={value}>
       {children}
     </CasesContext.Provider>
   );
