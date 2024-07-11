@@ -187,7 +187,6 @@ export const renderSummary = (details: Identifier): JSX.Element => {
   );
 };
 
-
 export const renderPartialRecoveryData = (partialRecovery: any[] | undefined): JSX.Element => {
 
   if(partialRecovery?.length === 0) return <></>;
@@ -259,9 +258,24 @@ export const renderPasswords = (passwords: any[] | undefined): JSX.Element => {
   );
 };
 
-export const renderPhones = (phones: any[] | undefined): JSX.Element => {
+const groupPhones = (phones) => {
+  const grouped = {};
 
-  if(phones?.length === 0) return <></>;
+  phones.forEach(phone => {
+    const key = `${phone.number}-${phone.source}`;
+    if (!grouped[key]) {
+      grouped[key] = { ...phone, count: 0 };
+    }
+    grouped[key].count += 1;
+  });
+
+  return Object.values(grouped);
+};
+
+export const renderPhones = (phones: any[] | undefined): JSX.Element => {
+  if (!phones || phones.length === 0) return <></>;
+
+  const groupedPhones = groupPhones(phones);
 
   return (
     <Card className="custom-card">
@@ -272,14 +286,23 @@ export const renderPhones = (phones: any[] | undefined): JSX.Element => {
       <hr className="title-underline" />
       <CardContent>
         <ul className="list-unstyled">
-          {phones?.map((phone, index) => (
+          {groupedPhones.map((phone, index) => (
             <li
               key={index}
               className="flex flex-row justify-between items-center mb-3 item-divider"
-              style={index === phones?.length - 1 ? { borderBottom: 'none' } : {}}
+              style={index === groupedPhones.length - 1 ? { borderBottom: 'none' } : {}}
             >
               <div className="flex flex-row pl-4">
+                {iconMap[phone.source] && (
+                  <img
+                    src={iconMap[phone.source]}
+                    alt={`${phone.source}`}
+                    className="mr-4"
+                    style={{ width: '40px', height: '40px', fontSize: '12px' }}
+                  />
+                )}
                 <span>{phone.number}</span>
+                {phone.count > 1 && <span className="ml-2">({phone.count})</span>}
               </div>
             </li>
           ))}
@@ -288,7 +311,6 @@ export const renderPhones = (phones: any[] | undefined): JSX.Element => {
     </Card>
   );
 };
-
 export const renderExistors = (existors: Existor[] | undefined, profiles: Profile[] | undefined, emails: Email[] | undefined, phones: Phone[] | undefined, pictures: Picture[] | undefined) => {
   const filteredExistors = existors?.filter(existor => existor.exists);
   if( filteredExistors?.length === 0 ) return <></>;;
@@ -317,9 +339,9 @@ export const renderExistors = (existors: Existor[] | undefined, profiles: Profil
                   {existor && iconMap[existor.source] && (
                     <img
                       src={iconMap[existor.source]}
-                      alt={`${existor.source} icon`}
+                      alt={`${existor.source}`}
                       className="mr-4"
-                      style={{ width: '40px', height: '40px' }}
+                      style={{ width: '40px', height: '40px', fontSize: '12px'}}
                     />
                   )}
                   <div className="flex flex-col">

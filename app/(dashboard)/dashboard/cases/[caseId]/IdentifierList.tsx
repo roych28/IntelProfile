@@ -64,7 +64,7 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
 
   const handleSelect = (event: any, identifier: Identifier) => {
     if(event.target.tagName === 'BUTTON' || !identifier.results_json) return; 
-    const { id } = identifier.id;
+    const id = identifier.id;
     setSelectedIds(prevSelectedIds =>
       prevSelectedIds.includes(id)
         ? prevSelectedIds.filter(selectedId => selectedId !== id)
