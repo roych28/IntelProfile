@@ -107,7 +107,10 @@ export async function POST(req: Request) {
         [name, user_id]
       );
     }
-
+    if(!caseResult) {
+      throw new Error('Failed to create/update case');
+    }
+    
     const caseRows: Case[] = caseResult.rows as Case[];
     if (caseRows.length === 0) {
       throw new Error('Failed to retrieve case data');

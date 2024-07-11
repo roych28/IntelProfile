@@ -25,10 +25,11 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
   const [error, setError] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]); // State for multiple selected identifiers
 
-  const handleSearch = async (id: string) => {
+  const handleSearch = async (id: string | undefined) => {
+    if (!id) return; 
     const identifier = identifiers?.find(identifier => identifier.id === id);
     if (!identifier) return;
-
+    
     if (loadingIds.includes(id)) {
       return; // Prevent multiple simultaneous searches
     }
@@ -63,8 +64,10 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
   };
 
   const handleSelect = (event: any, identifier: Identifier) => {
-    if(event.target.tagName === 'BUTTON' || !identifier.results_json) return; 
+    if (event.target.tagName === 'BUTTON' || !identifier.results_json) return;
     const id = identifier.id;
+    if (!id) return; // Ensure id is defined
+
     setSelectedIds(prevSelectedIds =>
       prevSelectedIds.includes(id)
         ? prevSelectedIds.filter(selectedId => selectedId !== id)
@@ -110,7 +113,7 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
                 )}
               </div>
               <Select
-                onValueChange={(value) => onIdentifierChange(identifier.id, 'type', value)}
+                onValueChange={(value) => onIdentifierChange(identifier.id!, 'type', value)}
                 value={identifier.type}
               >
                 <SelectTrigger className="bg-gray-800 text-white border-gray-700 mb-2">
@@ -129,18 +132,18 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
               </Select>
               <Input
                 value={identifier.query}
-                onChange={(e) => onIdentifierChange(identifier.id, 'query', e.target.value)}
+                onChange={(e) => onIdentifierChange(identifier.id!, 'query', e.target.value)}
                 placeholder="Enter query"
                 className="bg-gray-800 text-white border-gray-700 mb-2"
               />
               <div className="flex space-x-2">
                 <Button
-                  className={`bg-blue-500 hover:bg-blue-600 ${loadingIds.includes(identifier.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`bg-blue-500 hover:bg-blue-600 ${identifier.id && loadingIds.includes(identifier.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
                   onClick={identifier.id ? () => handleSearch(identifier.id) : undefined}
                   type="button"
                   disabled={!identifier.id || loadingIds.includes(identifier.id)}
                 >
-                  {loadingIds.includes(identifier.id) ? 'Searching...' : 'Search'}
+                  {identifier?.id && loadingIds.includes(identifier.id) ? 'Searching...' : 'Search'}
                 </Button> 
               </div>
             </div>

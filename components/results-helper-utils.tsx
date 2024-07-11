@@ -146,10 +146,10 @@ export const renderTimeline = (leaks: Leak[]): JSX.Element => {
 };
 
 export const renderSummary = (details: Identifier): JSX.Element => {
-  const createdAtDates = details?.created_at.split(',').map(date => date.trim());
-  const queriesData = details?.query.split(',').map(item => item.trim());
-  const typesData = details?.type.split(',').map(item => item.trim());
-  const statusData = details?.status.split(',').map(item => item.trim());
+  const createdAtDates = details?.created_at?.split(',').map((date: any) => date.trim());
+  const queriesData = details?.query?.split(',').map(item => item.trim());
+  const typesData = details?.type?.split(',').map(item => item.trim());
+  const statusData = details?.status?.split(',').map(item => item.trim());
 
   return (
     <Card className="custom-card">
@@ -176,7 +176,7 @@ export const renderSummary = (details: Identifier): JSX.Element => {
             </TableRow>
             <TableRow>
               <TableCell scope="row">Created At</TableCell>
-              {createdAtDates?.map((createdAt, index) => (
+              {createdAtDates?.map((createdAt: any, index: number) => (
                 <TableCell key={index}>{new Date(createdAt).toLocaleString()}</TableCell>
               ))}
             </TableRow>
@@ -258,10 +258,10 @@ export const renderPasswords = (passwords: any[] | undefined): JSX.Element => {
   );
 };
 
-const groupPhones = (phones) => {
-  const grouped = {};
+const groupPhones = (phones: Phone[]) => {
+  const grouped: { [key: string]: Phone & { count: number } } = {};
 
-  phones.forEach(phone => {
+  phones.forEach((phone) => {
     const key = `${phone.number}-${phone.source}`;
     if (!grouped[key]) {
       grouped[key] = { ...phone, count: 0 };

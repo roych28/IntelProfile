@@ -32,7 +32,7 @@ const IdentifierPage: React.FC = () => {
       const caseDetails: CaseDetails | undefined = getCaseById(caseIdStr);
       if (caseDetails) {
         const foundIdentifiers = caseDetails.identifiers?.filter(
-          (identifier: Identifier) => idsArray.includes(identifier.id)
+          (identifier: Identifier) => identifier.id && idsArray.includes(identifier.id)
         ) || [];
 
         const mergedData: Identifier = mergeIdentifiers(foundIdentifiers);
