@@ -8,7 +8,6 @@ export const formSchema = z.object({
     case_id: z.string(),
     type: z.string(),
     query: z.string(),
-    image_url: z.string().optional(),
   })).optional(),
 });
 

@@ -36,7 +36,7 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   const toastMessage = initialData ? 'Case updated.' : 'Case created.';
   const action = initialData ? 'Save' : 'Create';
 
-  const [identifiers, setIdentifiers] = useState<Identifier[]>([]);
+  const [identifiers, setIdentifiers] = useState<Identifier[] | undefined>([]);
 
   const defaultValues = initialData ? initialData : { name: '', identifiers: [] };
 

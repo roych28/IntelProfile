@@ -38,7 +38,7 @@ export interface Phone {
 };
 
 export interface Identifier {
-  id: string;
+  id?: string;
   case_id: string;
   type: string;
   query: string;

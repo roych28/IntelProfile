@@ -292,14 +292,16 @@ export const renderPhones = (phones: any[] | undefined): JSX.Element => {
               className="flex flex-row justify-between items-center mb-3 item-divider"
               style={index === groupedPhones.length - 1 ? { borderBottom: 'none' } : {}}
             >
-              <div className="flex flex-row pl-4">
-                {iconMap[phone.source] && (
+              <div className="flex flex-row pl-4 items-center">
+                {phone.source && iconMap[phone.source] ? (
                   <img
                     src={iconMap[phone.source]}
                     alt={`${phone.source}`}
                     className="mr-4"
                     style={{ width: '40px', height: '40px', fontSize: '12px' }}
                   />
+                ) : (
+                  <div className="mr-4" style={{ width: '40px', height: '40px' }}></div>
                 )}
                 <span>{phone.number}</span>
                 {phone.count > 1 && <span className="ml-2">({phone.count})</span>}
@@ -311,9 +313,10 @@ export const renderPhones = (phones: any[] | undefined): JSX.Element => {
     </Card>
   );
 };
+
 export const renderExistors = (existors: Existor[] | undefined, profiles: Profile[] | undefined, emails: Email[] | undefined, phones: Phone[] | undefined, pictures: Picture[] | undefined) => {
   const filteredExistors = existors?.filter(existor => existor.exists);
-  if( filteredExistors?.length === 0 ) return <></>;;
+  if( filteredExistors?.length === 0 ) return <></>;
 
   return (
     <Card className="custom-card">
@@ -362,7 +365,12 @@ export const renderExistors = (existors: Existor[] | undefined, profiles: Profil
                 </div>
                 <div className="flex justify-end pr-4">
                   {picture?.picture && (
-                    <img src={picture.picture} alt="Profile" className="w-10 h-10 rounded-full" />
+                    <img 
+                      src={picture.picture} 
+                      alt="Profile" 
+                      className="w-10 h-10 rounded-full" 
+                      style={{ width: '40px', height: '40px', fontSize: '12px'}}
+                    />
                   )}
                 </div>
               </li>
