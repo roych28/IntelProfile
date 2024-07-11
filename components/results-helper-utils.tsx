@@ -9,6 +9,10 @@ import { iconMap } from '@/constants/data';
 import { Table, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 
 export const renderProfilePictures = (profiles: Profile[]): JSX.Element => {
+  const profilesWithPictures = profiles.filter(profile => profile.profile_pic);
+  
+  if (profilesWithPictures.length === 0) return <></>;
+  
   return (
     <Card className="custom-card">
       <CardHeader className="card-header pb-2">
@@ -18,28 +22,26 @@ export const renderProfilePictures = (profiles: Profile[]): JSX.Element => {
       <hr className="title-underline" />
       <CardContent>
         <ul className="list-unstyled">
-          {profiles
-            .filter(profile => profile.profile_pic) // Only include profiles with profile pictures
-            .map((profile, index) => (
-              <li
-                key={index}
-                className="flex flex-row justify-between items-center mb-3 item-divider"
-                style={index === profiles.length - 1 ? { borderBottom: 'none' } : {}}
-              >
-                <div className="flex items-center pl-4">
-                  <img
-                    src={profile.profile_pic}
-                    alt={`${profile.source} profile`}
-                    className="rounded-full mr-3 icon-size"
-                    style={{ width: '40px', height: '40px' }}
-                  />
-                  <span>{profile.source}</span>
-                </div>
-                <a href={profile.profile_pic} download className="p-0 flex items-center pr-4">
-                  <DownloadIcon className="text-dark" />
-                </a>
-              </li>
-            ))}
+          {profilesWithPictures.map((profile, index) => (
+            <li
+              key={index}
+              className="flex flex-row justify-between items-center mb-3 item-divider"
+              style={index === profilesWithPictures.length - 1 ? { borderBottom: 'none' } : {}}
+            >
+              <div className="flex items-center pl-4">
+                <img
+                  src={profile.profile_pic}
+                  alt={`${profile.source} profile`}
+                  className="rounded-full mr-3 icon-size"
+                  style={{ width: '40px', height: '40px' }}
+                />
+                <span>{profile.source}</span>
+              </div>
+              <a href={profile.profile_pic} download className="p-0 flex items-center pr-4">
+                <DownloadIcon className="text-dark" />
+              </a>
+            </li>
+          ))}
         </ul>
         <div className="flex justify-end m-3">
           <Button className="btn btn-dark">Download All</Button>
@@ -48,6 +50,7 @@ export const renderProfilePictures = (profiles: Profile[]): JSX.Element => {
     </Card>
   );
 };
+
 
 export const renderStatsCards = (data: StatsData | null): JSX.Element => {
 

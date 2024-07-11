@@ -1,37 +1,46 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useCases } from '@/app/lib/data-provider';
 import CaseForm from './CaseForm';
 import PageHeader from '@/components/layout/page-header';
+import { Case } from '@/types';
 
-const CasePage = () => {
+const CasePage: React.FC = () => {
   const { caseId } = useParams();
-  const { getCaseById, loading } = useCases();
+  const { getCaseById } = useCases();
+  const [caseDetails, setCaseDetails] = useState<Case | null>(null);
 
   const caseIdString = Array.isArray(caseId) ? caseId[0] : caseId;
-  const caseDetails = getCaseById(caseIdString);
+
+  useEffect(() => {
+    if (caseIdString) {
+      const fetchCaseDetails = async () => {
+        const details = await getCaseById(caseIdString);
+        if (details) {
+          setCaseDetails(details);
+        }
+      };
+      fetchCaseDetails();
+    }
+  }, [caseIdString, getCaseById]);
 
   const breadcrumbItems = [
     { title: 'Cases', link: '/dashboard/cases' },
-    { title: `${caseDetails?.name || ''}`, link: `/dashboard/cases/${caseId}` },
+    { title: caseDetails?.name || 'Loading...', link: `/dashboard/cases/${caseIdString}` },
   ];
 
   return (
     <div className="max-h-screen">
       <PageHeader breadcrumbItems={breadcrumbItems} />
       <div className="mx-auto py-8 px-6">
-        {loading ? (
+        {!caseDetails ? (
           <div className="flex justify-center items-center">
             <span>Loading...</span>
           </div>
         ) : (
-          caseId && caseDetails ? (
-            <CaseForm initialData={caseDetails} />
-          ) : (
-            <CaseForm />
-          )
+          <CaseForm initialData={caseDetails} />
         )}
       </div>
     </div>

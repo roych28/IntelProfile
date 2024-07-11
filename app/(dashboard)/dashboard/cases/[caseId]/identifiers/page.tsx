@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useCases } from '@/app/lib/data-provider';
 import Breadcrumbs from '@/components/breadcrumbs';
-import { CaseDetails, Identifier, StatsData, Existor, Profile, Leak, Picture, Phone, Email } from '@/types';
+import { CaseDetails, Identifier, StatsData, Existor, Profile, Leak } from '@/types';
 import { renderStatsCards, renderLeaks, renderTimeline, renderSummary, renderProfilePictures, renderPartialRecoveryData, renderExistors, renderPhones, renderPasswords } from '@/components/results-helper-utils';
 import dynamic from 'next/dynamic';
 
@@ -17,6 +17,7 @@ const IdentifierPage: React.FC = () => {
   const [allProfiles, setAllProfiles] = useState<Profile[]>([]);
   const [allExistors, setAllExistors] = useState<Existor[]>([]);
   const [allLeaks, setAllLeaks] = useState<Leak[]>([]);
+  const [caseDetails, setCaseDetails] = useState<CaseDetails | null>(null);
 
   const LeafletMap = dynamic(() => import('@/components/LeafletMap'), {
     loading: () => <p>A map is loading</p>,
@@ -26,50 +27,55 @@ const IdentifierPage: React.FC = () => {
   useEffect(() => {
     const caseIdStr = Array.isArray(caseId) ? caseId[0] : caseId;
     if (caseIdStr) {
-      const ids = searchParams.get('ids') || '';
-      const idsArray = ids.split(',');
+      const fetchCaseDetails = async () => {
+        const details = await getCaseById(caseIdStr);
+        if (details) {
+          setCaseDetails(details);
 
-      const caseDetails: CaseDetails | undefined = getCaseById(caseIdStr);
-      if (caseDetails) {
-        const foundIdentifiers = caseDetails.identifiers?.filter(
-          (identifier: Identifier) => identifier.id && idsArray.includes(identifier.id)
-        ) || [];
+          const ids = searchParams.get('ids') || '';
+          const idsArray = ids.split(',');
 
-        const mergedData: Identifier = mergeIdentifiers(foundIdentifiers);
-        setMergedIdentifier(mergedData);
+          const foundIdentifiers = details.identifiers?.filter(
+            (identifier: Identifier) => identifier.id && idsArray.includes(identifier.id)
+          ) || [];
 
-        // Aggregate stats for the merged identifier
-        const profiles: Profile[] = [];
-        const existors: Existor[] = [];
-        const leaks: Leak[] = [];
+          const mergedData: Identifier = mergeIdentifiers(foundIdentifiers);
+          setMergedIdentifier(mergedData);
 
-        if (mergedData.results_json) {
-          mergedData.results_json.forEach(result => {
-            if (result.profiles) {
-              profiles.push(...result.profiles);
-            }
-            if (result.existors) {
-              existors.push(...result.existors);
-            }
-            if (result.leaks) {
-              leaks.push(...result.leaks);
-            }
-          });
+          // Aggregate stats for the merged identifier
+          const profiles: Profile[] = [];
+          const existors: Existor[] = [];
+          const leaks: Leak[] = [];
+
+          if (mergedData.results_json) {
+            mergedData.results_json.forEach(result => {
+              if (result.profiles) {
+                profiles.push(...result.profiles);
+              }
+              if (result.existors) {
+                existors.push(...result.existors);
+              }
+              if (result.leaks) {
+                leaks.push(...result.leaks);
+              }
+            });
+          }
+
+          setAllProfiles(profiles);
+          setAllExistors(existors);
+          setAllLeaks(leaks);
+
+          const aggregatedStats = calculateStats(profiles, existors);
+          setStatsData(aggregatedStats);
         }
-
-        setAllProfiles(profiles);
-        setAllExistors(existors);
-        setAllLeaks(leaks);
-
-        const aggregatedStats = calculateStats(profiles, existors);
-        setStatsData(aggregatedStats);
-      }
+      };
+      fetchCaseDetails();
     }
   }, [caseId, searchParams, getCaseById]);
 
   const breadcrumbItems = [
     { title: 'Cases', link: '/dashboard/cases' },
-    { title: `${Array.isArray(caseId) ? caseId[0] : caseId}`, link: `/dashboard/cases/${Array.isArray(caseId) ? caseId[0] : caseId}` },
+    { title: caseDetails?.name || 'Loading...', link: `/dashboard/cases/${Array.isArray(caseId) ? caseId[0] : caseId}` },
     { title: `Identifiers details`, link: `/dashboard/cases/${Array.isArray(caseId) ? caseId[0] : caseId}/identifiers?ids=${searchParams.get('ids')}` },
   ];
 
@@ -124,10 +130,9 @@ const IdentifierPage: React.FC = () => {
                 </div>
                 <div className="col-span-1">
                   <div key={mergedIdentifier.id}>
-                  <div className="col-span-1 mb-4">
-                    {renderSummary(mergedIdentifier)}
-                  </div>
-                    
+                    <div className="col-span-1 mb-4">
+                      {renderSummary(mergedIdentifier)}
+                    </div>
                     {allProfiles.length > 0 && (
                       <div className="col-span-1 mb-4">
                         {mergedIdentifier.results_json && renderProfilePictures(allProfiles)}
