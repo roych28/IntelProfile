@@ -16,10 +16,11 @@ import { useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { CaseFormValues, formSchema } from './formSchema';
 import IdentifierList from './IdentifierList';
-import AddIdentifierForm from './AddIdentifierForm';
+import AddIdentifierToolbar from './AddIdentifierToolbar';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash } from 'lucide-react'; // Import the Trash icon
 import { Identifier } from '@/types';
+import { useCases } from '@/app/lib/data-provider';
 
 interface CaseFormProps {
   initialData?: CaseFormValues | null;
@@ -30,6 +31,7 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const { caseId } = useParams();
+  const { refetchCases } = useCases();
 
   const toastMessage = initialData ? 'Case updated.' : 'Case created.';
   const action = initialData ? 'Save' : 'Create';
@@ -43,6 +45,8 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
     defaultValues,
   });
 
+  const isNewCase = caseId === 'new';
+
   useEffect(() => {
     if (initialData?.identifiers) {
       setIdentifiers(initialData.identifiers);
@@ -52,7 +56,11 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   const onSubmit = async (data: CaseFormValues) => {
     try {
       setLoading(true);
-      data.identifiers = identifiers; // Ensure identifiers are included in the form data
+      if (isNewCase) 
+        data.identifiers = undefined;
+      else
+        data.identifiers = identifiers || [];
+
       const response = await fetch(`/api/cases`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -63,6 +71,10 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
         throw new Error('Network response was not ok');
       }
 
+      await refetchCases();
+      if (isNewCase) {
+        router.push(`/dashboard/cases`);
+      }
       toast({
         variant: 'default',
         title: toastMessage,
@@ -82,14 +94,14 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/cases/${caseId}`, { method: 'DELETE' });
+      const response = await fetch(`/api/cases?id=${caseId}`, { method: 'DELETE' });
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
 
-      router.refresh();
-      router.push(`/cases`);
+      router.push(`/dashboard/cases`);
+      await refetchCases();
       toast({
         variant: 'default',
         title: 'Case deleted.',
@@ -116,10 +128,15 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
 
   const addIdentifier = (type: string, query: string) => {
     const caseIdString = Array.isArray(caseId) ? caseId[0] : caseId;
-    const newId = Math.random().toString();
-    const updatedIdentifiers = [...identifiers, { id: newId, case_id: caseIdString, type, query }];
+    const newIdentifier: Identifier = {
+      case_id: caseIdString,
+      type,
+      query,
+    };
+    const updatedIdentifiers = [...identifiers, newIdentifier];
     setIdentifiers(updatedIdentifiers);
     form.setValue('identifiers', updatedIdentifiers);
+    form.trigger('identifiers'); // Mark the form as dirty
   };
 
   const goToDetails = (identifierIds: string[]) => {
@@ -130,7 +147,7 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   return (
     <>
       <div className="flex items-center justify-between mb-4">
-        <AddIdentifierForm onAdd={addIdentifier} />
+        {!isNewCase && <AddIdentifierToolbar onAdd={addIdentifier} />}
         <div className="flex items-center space-x-2">
           {initialData && (
             <Button
@@ -173,11 +190,11 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
                 </FormItem>
               )}
             />
-            <IdentifierList
+            {!isNewCase && <IdentifierList
               identifiers={identifiers}
               onIdentifierChange={handleIdentifierChange}
               onDetailsClick={goToDetails} // Pass the function for handling details click
-            />
+            />}
           </form>
         </Form>
       </div>

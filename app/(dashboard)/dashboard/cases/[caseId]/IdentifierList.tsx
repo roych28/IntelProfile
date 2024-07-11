@@ -26,7 +26,7 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
   const [selectedIds, setSelectedIds] = useState<string[]>([]); // State for multiple selected identifiers
 
   const handleSearch = async (id: string) => {
-    const identifier = identifiers.find(identifier => identifier.id === id);
+    const identifier = identifiers?.find(identifier => identifier.id === id);
     if (!identifier) return;
 
     if (loadingIds.includes(id)) {
@@ -62,8 +62,9 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
     }
   };
 
-  const handleSelect = (event: any, id: string) => {
-    if(event.target.tagName === 'BUTTON') return; 
+  const handleSelect = (event: any, identifier: Identifier) => {
+    if(event.target.tagName === 'BUTTON' || !identifier.results_json) return; 
+    const { id } = identifier.id;
     setSelectedIds(prevSelectedIds =>
       prevSelectedIds.includes(id)
         ? prevSelectedIds.filter(selectedId => selectedId !== id)
@@ -90,11 +91,11 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
       </div>
       <div className="flex-1 p-3 overflow-y-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {identifiers.map((identifier: Identifier) => (
+          {identifiers?.map((identifier: Identifier, index: number) => (
             <div
-              key={identifier.id}
-              className={`p-4 border ${selectedIds.includes(identifier.id) ? 'border-blue-500' : 'border-gray-700'} bg-gray-800 rounded-lg cursor-pointer`}
-              onClick={(e) => handleSelect(e, identifier.id)}
+              key={identifier.id ?? `temp-key-${index}`}
+              className={`p-4 border ${identifier.id && selectedIds.includes(identifier.id) ? 'border-blue-500' : 'border-gray-700'} bg-gray-800 rounded-lg cursor-pointer`}
+              onClick={identifier.id ? (e) => handleSelect(e, identifier) : undefined}
             >
               <div className="flex items-center mb-2">
                 <Image
@@ -135,9 +136,9 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
               <div className="flex space-x-2">
                 <Button
                   className={`bg-blue-500 hover:bg-blue-600 ${loadingIds.includes(identifier.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  onClick={() => handleSearch(identifier.id)}
+                  onClick={identifier.id ? () => handleSearch(identifier.id) : undefined}
                   type="button"
-                  disabled={loadingIds.includes(identifier.id)}
+                  disabled={!identifier.id || loadingIds.includes(identifier.id)}
                 >
                   {loadingIds.includes(identifier.id) ? 'Searching...' : 'Search'}
                 </Button> 

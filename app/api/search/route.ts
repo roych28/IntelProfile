@@ -16,7 +16,6 @@ async function updateIdentifierStatus(client: VercelPoolClient, identifierId: st
   } catch (error) {
     console.error('Error updating identifier status:', error);
   }
-  
 }
 
 async function pollStatus(query: string, type: string, client: VercelPoolClient, identifierId: string) {

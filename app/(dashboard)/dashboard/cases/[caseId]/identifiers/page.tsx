@@ -124,7 +124,10 @@ const IdentifierPage: React.FC = () => {
                 </div>
                 <div className="col-span-1">
                   <div key={mergedIdentifier.id}>
+                  <div className="col-span-1 mb-4">
                     {renderSummary(mergedIdentifier)}
+                  </div>
+                    
                     {allProfiles.length > 0 && (
                       <div className="col-span-1 mb-4">
                         {mergedIdentifier.results_json && renderProfilePictures(allProfiles)}

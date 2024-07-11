@@ -9,11 +9,11 @@ import {
   SelectValue
 } from '@/components/ui/select';
 
-interface AddIdentifierFormProps {
+interface AddIdentifierToolbarProps {
   onAdd: (type: string, query: string) => void;
 }
 
-const AddIdentifierForm: React.FC<AddIdentifierFormProps> = ({ onAdd }) => {
+const AddIdentifierToolbar: React.FC<AddIdentifierToolbarProps> = ({ onAdd }) => {
   const [newIdentifier, setNewIdentifier] = useState({ type: '', query: '' });
 
   const handleNewIdentifierChange = (field: string, value: string) => {
@@ -28,7 +28,6 @@ const AddIdentifierForm: React.FC<AddIdentifierFormProps> = ({ onAdd }) => {
   };
 
   return (
-    
       <div className="flex space-x-4 items-center">
         <Select
             onValueChange={(value) => handleNewIdentifierChange('type', value)}
@@ -62,4 +61,4 @@ const AddIdentifierForm: React.FC<AddIdentifierFormProps> = ({ onAdd }) => {
   );
 };
 
-export default AddIdentifierForm;
+export default AddIdentifierToolbar;

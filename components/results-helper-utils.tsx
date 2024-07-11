@@ -6,6 +6,7 @@ import { MagnifyingGlassIcon, PersonIcon, GroupIcon, GlobeIcon, DownloadIcon, Av
 import dayjs from 'dayjs';
 import { Leak, Identifier, Profile, StatsData, identifierImages, Existor, Email, Phone, Picture } from '@/types';
 import { iconMap } from '@/constants/data';
+import { Table, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 
 export const renderProfilePictures = (profiles: Profile[]): JSX.Element => {
   return (
@@ -144,16 +145,48 @@ export const renderTimeline = (leaks: Leak[]): JSX.Element => {
   );
 };
 
-export const renderSummary = (details: Identifier): JSX.Element => (
-  <Card className="mb-4 custom-card">
-    <CardHeader>
-      <p><strong>Query:</strong> {details.query}</p>
-      <p><strong>Type:</strong> {details.type}</p>
-      <p><strong>Status:</strong> {details?.status}</p>
-      <p><strong>Created At:</strong> {new Date(details.created_at).toLocaleString()}</p>
-    </CardHeader>
-  </Card>
-);
+export const renderSummary = (details: Identifier): JSX.Element => {
+  const createdAtDates = details?.created_at.split(',').map(date => date.trim());
+  const queriesData = details?.query.split(',').map(item => item.trim());
+  const typesData = details?.type.split(',').map(item => item.trim());
+  const statusData = details?.status.split(',').map(item => item.trim());
+
+  return (
+    <Card className="custom-card">
+      <CardContent className="card-header pb-2">
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell scope="row">Query</TableCell>
+              {queriesData?.map((query, index) => (
+                <TableCell key={index}>{query}</TableCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              <TableCell scope="row">Type</TableCell>
+              {typesData?.map((type, index) => (
+                <TableCell key={index}>{type}</TableCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              <TableCell scope="row">Status</TableCell>
+              {statusData?.map((status, index) => (
+                <TableCell key={index}>{status}</TableCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              <TableCell scope="row">Created At</TableCell>
+              {createdAtDates?.map((createdAt, index) => (
+                <TableCell key={index}>{new Date(createdAt).toLocaleString()}</TableCell>
+              ))}
+            </TableRow>
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  );
+};
+
 
 export const renderPartialRecoveryData = (partialRecovery: any[] | undefined): JSX.Element => {
 
