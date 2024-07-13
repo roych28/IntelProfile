@@ -18,7 +18,7 @@ import { CaseFormValues, formSchema } from './formSchema';
 import IdentifierList from './IdentifierList';
 import AddIdentifierToolbar from './AddIdentifierToolbar';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Trash } from 'lucide-react'; // Import the Trash icon
+import { Trash } from 'lucide-react';
 import { Identifier } from '@/types';
 import { useCases } from '@/app/lib/data-provider';
 
@@ -56,15 +56,16 @@ const CaseForm: React.FC<CaseFormProps> = ({ initialData }) => {
   const onSubmit = async (data: CaseFormValues) => {
     try {
       setLoading(true);
-      if (isNewCase) 
+      if (isNewCase) {
         data.identifiers = undefined;
-      else
+      } else {
         data.identifiers = identifiers || [];
+      }
 
       const response = await fetch(`/api/cases`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, id: isNewCase ? undefined : caseId }),
       });
 
       if (!response.ok) {

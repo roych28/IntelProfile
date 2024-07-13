@@ -34,7 +34,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   const getCaseById = (id: string) => {
-    return cases.find(caseItem => caseItem.id === id);
+    return cases?.find(caseItem => caseItem.id === id);
   };
 
   const value = useMemo(() => ({

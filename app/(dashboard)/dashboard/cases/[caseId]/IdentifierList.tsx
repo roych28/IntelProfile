@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,7 @@ import {
 import { CheckCircle } from 'lucide-react'; // Import the icon
 import { Identifier, identifierImages } from '@/types';
 import { useCases } from '@/app/lib/data-provider';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface IdentifierListProps {
   identifiers: Identifier[];
@@ -27,11 +28,15 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
   const [selectedIds, setSelectedIds] = useState<string[]>([]); // State for multiple selected identifiers
   const { refetchCases } = useCases();
 
+  useEffect(() => {
+    console.log('Identifiers prop:', identifiers);
+  }, [identifiers]);
+
   const handleSearch = async (id: string | undefined) => {
-    if (!id) return; 
+    if (!id) return;
     const identifier = identifiers?.find(identifier => identifier.id === id);
     if (!identifier) return;
-    
+
     if (loadingIds.includes(id)) {
       return; // Prevent multiple simultaneous searches
     }
@@ -58,7 +63,7 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
       onIdentifierChange(id, 'results', data);
       setError('');
       if(refetchCases) refetchCases();
-      
+
     } catch (err: any) {
       setError(err.message);
       onIdentifierChange(id, 'results', null);
@@ -84,7 +89,7 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
   };
 
   return (
-    <div className="max-h-screen flex flex-col">
+    <div className="h-screen flex flex-col">
       <div className="flex justify-between items-center p-2 shadow-md">
         <h2 className="text-lg font-semibold">Identifiers</h2>
         <Button
@@ -96,7 +101,7 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
           Explore Identifier
         </Button>
       </div>
-      <div className="flex-1 p-3 overflow-y-auto">
+      <ScrollArea className="h-[calc(80vh-220px)]">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {identifiers?.map((identifier: Identifier, index: number) => (
             <div
@@ -153,7 +158,7 @@ const IdentifierList: React.FC<IdentifierListProps> = ({ identifiers, onIdentifi
             </div>
           ))}
         </div>
-      </div>
+      </ScrollArea>
       {error && <div className="text-red-500 mt-4">{error}</div>}
     </div>
   );

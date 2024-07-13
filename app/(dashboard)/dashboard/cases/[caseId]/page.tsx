@@ -11,11 +11,10 @@ const CasePage: React.FC = () => {
   const { caseId } = useParams();
   const { getCaseById } = useCases();
   const [caseDetails, setCaseDetails] = useState<Case | null>(null);
-
   const caseIdString = Array.isArray(caseId) ? caseId[0] : caseId;
 
   useEffect(() => {
-    if (caseIdString) {
+    if (caseIdString && caseIdString !== 'new') {
       const fetchCaseDetails = async () => {
         const details = await getCaseById(caseIdString);
         if (details) {
@@ -28,19 +27,23 @@ const CasePage: React.FC = () => {
 
   const breadcrumbItems = [
     { title: 'Cases', link: '/dashboard/cases' },
-    { title: caseDetails?.name || 'Loading...', link: `/dashboard/cases/${caseIdString}` },
+    { title: caseDetails?.name || (caseIdString === 'new' ? 'New Case' : 'Loading...'), link: `/dashboard/cases/${caseIdString}` },
   ];
 
   return (
     <div className="max-h-screen">
       <PageHeader breadcrumbItems={breadcrumbItems} />
       <div className="mx-auto py-8 px-6">
-        {!caseDetails ? (
-          <div className="flex justify-center items-center">
-            <span>Loading...</span>
-          </div>
+        {caseIdString === 'new' ? (
+          <CaseForm initialData={{ name: '', identifiers: [] }} />
         ) : (
-          <CaseForm initialData={caseDetails} />
+          !caseDetails ? (
+            <div className="flex justify-center items-center">
+              <span>Loading...</span>
+            </div>
+          ) : (
+            <CaseForm initialData={caseDetails} />
+          )
         )}
       </div>
     </div>
